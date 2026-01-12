@@ -1,0 +1,8 @@
+{
+  "name": "FullStack Odyssey v2.0",
+  "description": "An immersive, AI-driven command center for mastering full-stack engineering with real-time architectural blueprint generation and streaming mentorship.",
+  "requestFramePermissions": [
+    "microphone",
+    "camera"
+  ]
+}
