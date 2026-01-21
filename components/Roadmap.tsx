@@ -97,26 +97,7 @@ const Roadmap: React.FC<RoadmapProps> = ({ modules, setRoadmap, onComplete }) =>
   if (!activeModule) return null;
 
   return (
-    <div className="flex h-full overflow-hidden bg-transparent text-slate-100 font-['Outfit']">
-      <style>{`
-        @keyframes scan {
-          0% { transform: translateY(-100%); }
-          100% { transform: translateY(1000%); }
-        }
-        @keyframes kenburns {
-          0% { transform: scale(1); }
-          100% { transform: scale(1.15); }
-        }
-        @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          25% { transform: translateX(-8px); }
-          50% { transform: translateX(8px); }
-          75% { transform: translateX(-8px); }
-        }
-        .animate-scan { animation: scan 4s linear infinite; }
-        .animate-kenburns { animation: kenburns 20s ease-in-out infinite alternate; }
-        .animate-shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
-      `}</style>
+    <div className="flex h-full bg-slate-950/20 backdrop-blur-md font-['Outfit']">
 
       {/* Video Overlay */}
       {activeVideo && (
@@ -131,7 +112,7 @@ const Roadmap: React.FC<RoadmapProps> = ({ modules, setRoadmap, onComplete }) =>
       )}
 
       {/* Navigation Panels */}
-      <div className="w-80 premium-glass border-r border-white/5 flex flex-col p-8 space-y-10 scrollbar-hide shrink-0 rounded-l-[40px]">
+      <div className="w-[300px] 2xl:w-80 premium-glass border-r border-white/5 flex flex-col p-6 lg:p-10 space-y-10 scrollbar-hide shrink-0">
         <div className="space-y-6">
           <div className="flex items-center justify-between px-2">
             <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Knowledge Streams</h4>
@@ -205,13 +186,13 @@ const Roadmap: React.FC<RoadmapProps> = ({ modules, setRoadmap, onComplete }) =>
       </div>
 
       {/* Content Engine */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden bg-[#020617]/40">
         <div
           ref={contentContainerRef}
-          className="flex-1 overflow-y-auto p-12 lg:p-24 scrollbar-hide relative"
+          className="flex-1 overflow-y-auto px-10 lg:px-20 py-16 scrollbar-hide relative"
         >
           {activeDay && (
-            <div key={`${selectedModuleId}-${selectedDayNumber}`} className="max-w-5xl mx-auto space-y-24 animate-in fade-in slide-in-from-bottom-12 duration-1000 ease-out">
+            <div key={`${selectedModuleId}-${selectedDayNumber}`} className="max-w-4xl mx-auto space-y-24 animate-in fade-in slide-in-from-bottom-12 duration-1000 ease-out">
               <header className="space-y-10 relative">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3 premium-glass pl-2 pr-4 py-1.5 rounded-full border-white/10 shadow-xl">
@@ -459,7 +440,7 @@ const Roadmap: React.FC<RoadmapProps> = ({ modules, setRoadmap, onComplete }) =>
         </div>
 
         {/* Intelligence Lab Sidebar */}
-        <div className="w-[380px] 2xl:w-[440px] premium-glass border-l border-white/5 p-8 lg:p-12 overflow-y-auto scrollbar-hide hidden xl:block shadow-[-20px_0_60px_rgba(0,0,0,0.5)] z-10 rounded-r-[40px]">
+        <div className="w-[320px] 2xl:w-[400px] premium-glass border-l border-white/5 p-8 lg:p-10 overflow-y-auto scrollbar-hide hidden xl:block shrink-0 shadow-[-20px_0_60px_rgba(0,0,0,0.5)] z-10">
           <div className="space-y-16">
             <header className="flex items-center justify-between">
               <h4 className="text-[11px] font-black text-slate-500 uppercase tracking-[0.5em]">Strategic Assets</h4>
