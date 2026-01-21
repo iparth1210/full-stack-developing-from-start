@@ -18,6 +18,7 @@ const Roadmap: React.FC<RoadmapProps> = ({ modules, setRoadmap, onComplete }) =>
   const [showExplanation, setShowExplanation] = useState(false);
   const [isAudioLoading, setIsAudioLoading] = useState(false);
   const [shakeQuiz, setShakeQuiz] = useState(false);
+  const [completing, setCompleting] = useState(false);
   const contentContainerRef = useRef<HTMLDivElement>(null);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
