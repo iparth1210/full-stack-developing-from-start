@@ -166,7 +166,7 @@ const App: React.FC = () => {
           </div>
         </header>
 
-        <div className="flex-1 min-h-0 relative overflow-hidden">
+        <div key={activeTab} className="flex-1 min-h-0 relative overflow-hidden animate-in fade-in slide-in-from-right-4 duration-700 ease-out">
           {renderContent()}
         </div>
       </main>
