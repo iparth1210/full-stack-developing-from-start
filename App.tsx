@@ -83,7 +83,17 @@ const App: React.FC = () => {
       case 'roadmap':
         return <Roadmap modules={roadmap} setRoadmap={setRoadmap} onComplete={(amount) => {
           addXp(amount);
-          // logic to mark current day as completed in roadmap state could go here if needed
+          setRoadmap(prev => {
+            const next = [...prev];
+            const currentModule = next.find(m => m.status === 'CURRENT');
+            if (currentModule) {
+              // Mark the current module as COMPLETED if it's the end, 
+              // or just update progress. For now we just nudge the UI.
+              currentModule.progress = Math.min(currentModule.progress + 15, 100);
+              if (currentModule.progress === 100) currentModule.status = 'COMPLETED';
+            }
+            return next;
+          });
         }} />;
       case 'project':
         return <ProjectConsole projectIdea={projectIdea} setProjectIdea={setProjectIdea} tasks={projectTasks} setTasks={setProjectTasks} />;
