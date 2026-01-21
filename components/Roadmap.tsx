@@ -10,6 +10,8 @@ interface RoadmapProps {
   setSelectedModuleId: (id: string | null) => void;
   selectedDayNumber: number;
   setSelectedDayNumber: (day: number) => void;
+  completedDays: Record<string, number[]>;
+  setCompletedDays: React.Dispatch<React.SetStateAction<Record<string, number[]>>>;
   onComplete?: (xp: number) => void;
 }
 
@@ -20,6 +22,8 @@ const Roadmap: React.FC<RoadmapProps> = ({
   setSelectedModuleId,
   selectedDayNumber,
   setSelectedDayNumber,
+  completedDays,
+  setCompletedDays,
   onComplete
 }) => {
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
@@ -45,9 +49,6 @@ const Roadmap: React.FC<RoadmapProps> = ({
     el.style.setProperty('--tilt-y', `${tiltY}deg`);
   };
 
-  const [completedDays, setCompletedDays] = useState<Record<string, Set<number>>>({
-    'm0': new Set([1])
-  });
 
   const activeModule = useMemo(() =>
     modules.find(m => m.id === selectedModuleId) || modules[0],
@@ -101,7 +102,7 @@ const Roadmap: React.FC<RoadmapProps> = ({
       if (selectedModuleId) {
         setCompletedDays(prev => ({
           ...prev,
-          [selectedModuleId]: new Set([...(prev[selectedModuleId] || []), selectedDayNumber])
+          [selectedModuleId]: Array.from(new Set([...(prev[selectedModuleId] || []), selectedDayNumber]))
         }));
       }
     } else {
@@ -113,7 +114,7 @@ const Roadmap: React.FC<RoadmapProps> = ({
   const getModuleProgress = (moduleId: string) => {
     const mod = modules.find(m => m.id === moduleId);
     if (!mod || !mod.dailySchedule) return 0;
-    const completedCount = completedDays[moduleId]?.size || 0;
+    const completedCount = completedDays[moduleId]?.length || 0;
     return Math.round((completedCount / mod.dailySchedule.length) * 100);
   };
 
@@ -182,12 +183,12 @@ const Roadmap: React.FC<RoadmapProps> = ({
         <div className="pt-8 border-t border-white/10 space-y-6">
           <div className="flex items-center justify-between px-2">
             <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Synapse Nodes</h4>
-            <span className="text-[9px] font-mono text-indigo-400/60 font-black">{completedDays[selectedModuleId || '']?.size || 0}/{activeModule.dailySchedule?.length || 0}</span>
+            <span className="text-[9px] font-mono text-indigo-400/60 font-black">{completedDays[selectedModuleId || '']?.length || 0}/{activeModule.dailySchedule?.length || 0}</span>
           </div>
           <div className="grid grid-cols-4 gap-3">
             {activeModule.dailySchedule?.map(day => {
               const isSelected = selectedDayNumber === day.day;
-              const isCompleted = completedDays[selectedModuleId || '']?.has(day.day);
+              const isCompleted = completedDays[selectedModuleId || '']?.includes(day.day);
 
               return (
                 <button
@@ -522,14 +523,14 @@ const Roadmap: React.FC<RoadmapProps> = ({
                     <p className="text-lg text-slate-300 font-medium leading-relaxed opacity-80">Finalize unit validation to secure this knowledge stream.</p>
                   </div>
                   <button
-                    disabled={completedDays[selectedModuleId || '']?.has(selectedDayNumber)}
+                    disabled={completedDays[selectedModuleId || '']?.includes(selectedDayNumber)}
                     onClick={() => setActiveMode('quiz')}
-                    className={`w-full py-6 rounded-[32px] text-[11px] font-black uppercase tracking-[0.4em] transition-all duration-700 shadow-2xl active:scale-95 ${completedDays[selectedModuleId || '']?.has(selectedDayNumber)
+                    className={`w-full py-6 rounded-[32px] text-[11px] font-black uppercase tracking-[0.4em] transition-all duration-700 shadow-2xl active:scale-95 ${completedDays[selectedModuleId || '']?.includes(selectedDayNumber)
                       ? 'bg-transparent border border-emerald-500/40 text-emerald-400 cursor-default opacity-100'
                       : 'premium-button text-white'
                       }`}
                   >
-                    {completedDays[selectedModuleId || '']?.has(selectedDayNumber) ? 'STREAM SECURED' : 'INITIATE VALIDATION'}
+                    {completedDays[selectedModuleId || '']?.includes(selectedDayNumber) ? 'STREAM SECURED' : 'INITIATE VALIDATION'}
                   </button>
                 </div>
               </div>

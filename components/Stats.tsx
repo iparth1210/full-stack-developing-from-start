@@ -7,6 +7,7 @@ interface StatsProps {
   xp: number;
   tasks: ProjectTask[];
   roadmap: RoadmapModule[];
+  logs: { id: string; text: string; type: 'info' | 'warn' | 'success'; timestamp: string }[];
 }
 
 const timeData = [
@@ -19,7 +20,7 @@ const timeData = [
   { name: 'Sun', hours: 1 },
 ];
 
-const Stats: React.FC<StatsProps> = ({ xp, tasks, roadmap }) => {
+const Stats: React.FC<StatsProps> = ({ xp, tasks, roadmap, logs }) => {
   const completedModules = roadmap.filter(m => m.status === ModuleStatus.COMPLETED).length;
   const projectSync = tasks.length > 0 ? Math.round((tasks.filter(t => t.completed).length / tasks.length) * 100) : 0;
 
@@ -148,21 +149,21 @@ const Stats: React.FC<StatsProps> = ({ xp, tasks, roadmap }) => {
           </div>
 
           <div className="lg:col-span-8 bg-slate-950 border border-white/5 p-12 rounded-[60px] shadow-3xl">
-            <h3 className="text-xl font-black text-white mb-8 tracking-tight uppercase">Recent Deployments</h3>
+            <h3 className="text-xl font-black text-white mb-8 tracking-tight uppercase">Strategic Activity Feed</h3>
             <div className="space-y-3">
-              {[
-                { date: '2h ago', text: 'Verified Mastery: The Transistor Physical Layer', badge: 'Study' },
-                { date: '1d ago', text: 'Pushed master-branch update: "Logic Gate Lab V2"', badge: 'Project' },
-                { date: '3d ago', text: 'Achieved Scholar Rank: +5,000 Milestone Bonus', badge: 'Milestone' },
-              ].map((m, i) => (
-                <div key={i} className="flex items-center justify-between p-6 bg-white/[0.01] border border-white/5 rounded-[30px] group transition-all hover:bg-white/[0.03] hover:border-indigo-500/20">
+              {logs.slice(-5).reverse().map((log) => (
+                <div key={log.id} className="flex items-center justify-between p-6 bg-white/[0.01] border border-white/5 rounded-[30px] group transition-all hover:bg-white/[0.03] hover:border-indigo-500/20">
                   <div className="flex items-center space-x-8">
-                    <span className="text-[10px] font-mono text-slate-600 font-bold uppercase tracking-widest w-16">{m.date}</span>
-                    <span className="text-lg text-slate-200 font-black group-hover:text-indigo-400 transition-colors uppercase truncate max-w-md">{m.text}</span>
+                    <span className="text-[10px] font-mono text-slate-600 font-bold uppercase tracking-widest w-20">{log.timestamp}</span>
+                    <span className="text-lg text-slate-200 font-black group-hover:text-indigo-400 transition-colors uppercase truncate max-w-md">{log.text}</span>
                   </div>
-                  <span className="text-[9px] font-black uppercase tracking-[0.3em] px-4 py-1.5 rounded-xl bg-slate-900 text-slate-500 border border-white/10 group-hover:text-white transition-colors">{m.badge}</span>
+                  <span className={`text-[9px] font-black uppercase tracking-[0.3em] px-4 py-1.5 rounded-xl bg-slate-900 border border-white/10 group-hover:text-white transition-colors ${log.type === 'success' ? 'text-emerald-500' : log.type === 'warn' ? 'text-rose-500' : 'text-slate-500'
+                    }`}>{log.type}</span>
                 </div>
               ))}
+              {logs.length === 0 && (
+                <div className="text-center py-20 text-slate-700 font-black uppercase tracking-[1em]">NO DATA DETECTED</div>
+              )}
             </div>
           </div>
         </div>

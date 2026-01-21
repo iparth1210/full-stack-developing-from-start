@@ -12,7 +12,7 @@ import { INITIAL_ROADMAP } from './constants';
 import { ProjectTask } from './types';
 
 const App: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'roadmap' | 'project' | 'mentor' | 'stats'>('roadmap');
+  const [activeTab, setActiveTab] = useState<'roadmap' | 'project' | 'mentor' | 'stats'>(() => (localStorage.getItem('odyssey_active_tab') as any) || 'roadmap');
   const [lastTab, setLastTab] = useState(activeTab);
 
   const [onboarding, setOnboarding] = useState(() => !localStorage.getItem('odyssey_initialized'));
@@ -34,6 +34,10 @@ const App: React.FC = () => {
     const saved = localStorage.getItem('odyssey_system_logs');
     return saved ? JSON.parse(saved) : [{ id: 'init', text: 'SYSTEM_INITIALIZED: ARCHITECT_LINK_ESTABLISHED', type: 'success', timestamp: new Date().toLocaleTimeString() }];
   });
+  const [completedDays, setCompletedDays] = useState<Record<string, number[]>>(() => {
+    const saved = localStorage.getItem('odyssey_completed_days');
+    return saved ? JSON.parse(saved) : { 'm0': [1] };
+  });
 
   const [showXpAlert, setShowXpAlert] = useState(false);
   const [isAntigravity, setIsAntigravity] = useState(false);
@@ -44,8 +48,8 @@ const App: React.FC = () => {
   const [parallax, setParallax] = useState({ x: 0, y: 0 });
 
   // Navigation Deep-Linking
-  const [selectedModuleId, setSelectedModuleId] = useState<string | null>(null);
-  const [selectedDayNumber, setSelectedDayNumber] = useState<number>(1);
+  const [selectedModuleId, setSelectedModuleId] = useState<string | null>(() => localStorage.getItem('odyssey_selected_module') || null);
+  const [selectedDayNumber, setSelectedDayNumber] = useState<number>(() => Number(localStorage.getItem('odyssey_selected_day')) || 1);
 
   // Singularity Pass: Ambient Audio Ref
   const ambientRef = useRef<HTMLAudioElement | null>(null);
@@ -63,6 +67,7 @@ const App: React.FC = () => {
 
   // Sync state to LocalStorage
   useEffect(() => {
+    localStorage.setItem('odyssey_active_tab', activeTab);
     localStorage.setItem('odyssey_project_idea', projectIdea);
     localStorage.setItem('odyssey_project_tasks', JSON.stringify(projectTasks));
     localStorage.setItem('odyssey_roadmap', JSON.stringify(roadmap));
@@ -70,7 +75,10 @@ const App: React.FC = () => {
     localStorage.setItem('odyssey_neural_intensity', neuralIntensity.toString());
     localStorage.setItem('odyssey_project_notes', projectNotes);
     localStorage.setItem('odyssey_system_logs', JSON.stringify(systemLogs.slice(-50)));
-  }, [projectIdea, projectTasks, roadmap, xp, neuralIntensity, projectNotes, systemLogs]);
+    localStorage.setItem('odyssey_completed_days', JSON.stringify(completedDays));
+    if (selectedModuleId) localStorage.setItem('odyssey_selected_module', selectedModuleId);
+    localStorage.setItem('odyssey_selected_day', selectedDayNumber.toString());
+  }, [projectIdea, projectTasks, roadmap, xp, neuralIntensity, projectNotes, systemLogs, completedDays, activeTab, selectedModuleId, selectedDayNumber]);
 
   const addSystemLog = (text: string, type: 'info' | 'warn' | 'success' = 'info') => {
     setSystemLogs(prev => [...prev.slice(-49), {
@@ -155,14 +163,20 @@ const App: React.FC = () => {
           setSelectedModuleId={setSelectedModuleId}
           selectedDayNumber={selectedDayNumber}
           setSelectedDayNumber={setSelectedDayNumber}
+          completedDays={completedDays}
+          setCompletedDays={setCompletedDays}
           onComplete={(amount) => {
             addXp(amount);
+            addSystemLog(`MILESTONE_REACHED: EARNED_${amount}_XP`, 'success');
             setRoadmap(prev => {
               const next = [...prev];
               const currentModule = next.find(m => m.status === 'CURRENT');
               if (currentModule) {
                 currentModule.progress = Math.min(currentModule.progress + 15, 100);
-                if (currentModule.progress === 100) currentModule.status = 'COMPLETED';
+                if (currentModule.progress === 100) {
+                  currentModule.status = 'COMPLETED' as any;
+                  addSystemLog(`KNOWLEDGE_STREAM_SECURED: ${currentModule.title.toUpperCase()}`, 'success');
+                }
               }
               return next;
             });
@@ -182,7 +196,7 @@ const App: React.FC = () => {
       case 'mentor':
         return <MentorChat context={`Active Module: ${roadmap.find(m => m.status === 'CURRENT')?.title || 'None'}. Project: ${projectIdea}`} />;
       case 'stats':
-        return <Stats xp={xp} tasks={projectTasks} roadmap={roadmap} />;
+        return <Stats xp={xp} tasks={projectTasks} roadmap={roadmap} logs={systemLogs} />;
       default:
         return null;
     }
