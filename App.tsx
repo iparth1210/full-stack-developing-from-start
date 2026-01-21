@@ -96,7 +96,7 @@ const App: React.FC = () => {
         <AntigravityPortal
           onExit={() => setIsAntigravity(false)}
           xp={xp}
-          activeModule={INITIAL_ROADMAP[0]}
+          activeModule={roadmap.find(m => m.status === 'CURRENT') || roadmap[0]}
           tasks={projectTasks}
           projectIdea={projectIdea}
         />
