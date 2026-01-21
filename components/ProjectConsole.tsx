@@ -315,65 +315,66 @@ const ProjectConsole: React.FC<ProjectConsoleProps> = ({ projectIdea, setProject
                 </header>
 
                 <div className="flex-1 font-mono text-[11px] space-y-5 overflow-y-auto scrollbar-hide relative z-10 pr-2">
-                  {logs.map((log) => (
-                    <div key={log.id} className={`flex space-x-5 animate-in slide-in-from-bottom-3 duration-500 ${log.type === 'success' ? 'text-emerald-400 text-glow-emerald' : log.type === 'warn' ? 'text-rose-400 text-glow-rose' : 'text-slate-500'
-                      }`}>
-                      <span className="opacity-10 text-[9px] mt-0.5 tracking-tighter">[{new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}]</span>
-                      <p className="flex-1 leading-relaxed tracking-tight group-hover/kernel:text-slate-300 transition-colors">{log.text}</p>
+                  <div className="terminal-scroll space-y-5">
+                    {logs.map((log) => (
+                      <div key={log.id} className={`flex space-x-5 animate-in slide-in-from-bottom-2 fade-in duration-300 ${log.type === 'success' ? 'text-emerald-400 text-glow-emerald' : log.type === 'warn' ? 'text-rose-400 text-glow-rose' : 'text-slate-500'
+                        }`}>
+                        <span className="opacity-10 text-[9px] mt-0.5 tracking-tighter">[{new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}]</span>
+                        <p className="flex-1 leading-relaxed tracking-tight group-hover/kernel:text-slate-300 transition-colors font-mono">{log.text}</p>
+                      </div>
+                    ))}
+                    <div ref={logEndRef} />
+                  </div>
+
+                  <div className="mt-12 pt-12 border-t border-white/5 space-y-12 relative z-10">
+                    <div className="space-y-6">
+                      <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.3em]">
+                        <span className="text-slate-600">Cognitive Load</span>
+                        <span className="text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]">OPTIMAL</span>
+                      </div>
+                      <div className="h-2.5 w-full bg-slate-900 rounded-full overflow-hidden p-[2px]">
+                        <div className="h-full bg-indigo-500 rounded-full shadow-[0_0_20px_rgba(99,102,241,1)] transition-all duration-1000" style={{ width: '92%' }}></div>
+                      </div>
                     </div>
-                  ))}
-                  <div ref={logEndRef} />
+                    <button
+                      onClick={() => { setProjectIdea(''); setBlueprintUrl(null); }}
+                      className="w-full py-6 border border-rose-500/20 text-rose-500/40 rounded-[32px] text-[11px] font-black uppercase tracking-[0.4em] hover:bg-rose-500 hover:text-white transition-all duration-500 active:scale-95 shadow-lg"
+                    >
+                      TERMINATE SYSTEM
+                    </button>
+                  </div>
+
+                  {/* Terminal Corner HUD Decor */}
+                  <div className="absolute top-6 right-6 w-12 h-12 border-t-2 border-r-2 border-indigo-500/20 rounded-tr-3xl pointer-events-none"></div>
+                  <div className="absolute bottom-6 left-6 w-12 h-12 border-b-2 border-l-2 border-indigo-500/20 rounded-bl-3xl pointer-events-none"></div>
                 </div>
 
-                <div className="mt-12 pt-12 border-t border-white/5 space-y-12 relative z-10">
-                  <div className="space-y-6">
-                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.3em]">
-                      <span className="text-slate-600">Cognitive Load</span>
-                      <span className="text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]">OPTIMAL</span>
+                <div className="p-16 premium-gradient rounded-[72px] text-white shadow-4xl relative overflow-hidden group shadow-indigo-500/20">
+                  {/* Custom premium gradient background for this card */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-900 group-hover:scale-110 transition-transform duration-[3000ms]"></div>
+                  <div className="relative z-10 space-y-8">
+                    <div className="flex items-center space-x-6">
+                      <div className="w-16 h-16 bg-white/10 backdrop-blur-3xl rounded-[28px] flex items-center justify-center border border-white/20 shadow-2xl transition-transform group-hover:-rotate-12">
+                        <svg className="w-9 h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                      </div>
+                      <div className="space-y-1">
+                        <h5 className="text-2xl font-black tracking-tight uppercase">Architect Voice</h5>
+                        <p className="text-[10px] text-white/40 uppercase tracking-[0.4em] font-black">Advisory Protocol</p>
+                      </div>
                     </div>
-                    <div className="h-2.5 w-full bg-slate-900 rounded-full overflow-hidden p-[2px]">
-                      <div className="h-full bg-indigo-500 rounded-full shadow-[0_0_20px_rgba(99,102,241,1)] transition-all duration-1000" style={{ width: '92%' }}></div>
-                    </div>
+                    <p className="text-2xl text-white font-black leading-tight italic tracking-tight antialiased">
+                      <span className="text-white/30 text-4xl mr-1">"</span>
+                      Your vision suggests a decoupled microservices approach. Prioritize the core ingress validation before optimizing visual state.
+                      <span className="text-white/30 text-4xl ml-1">"</span>
+                    </p>
                   </div>
-                  <button
-                    onClick={() => { setProjectIdea(''); setBlueprintUrl(null); }}
-                    className="w-full py-6 border border-rose-500/20 text-rose-500/40 rounded-[32px] text-[11px] font-black uppercase tracking-[0.4em] hover:bg-rose-500 hover:text-white transition-all duration-500 active:scale-95 shadow-lg"
-                  >
-                    TERMINATE SYSTEM
-                  </button>
-                </div>
-
-                {/* Terminal Corner HUD Decor */}
-                <div className="absolute top-6 right-6 w-12 h-12 border-t-2 border-r-2 border-indigo-500/20 rounded-tr-3xl pointer-events-none"></div>
-                <div className="absolute bottom-6 left-6 w-12 h-12 border-b-2 border-l-2 border-indigo-500/20 rounded-bl-3xl pointer-events-none"></div>
-              </div>
-
-              <div className="p-16 premium-gradient rounded-[72px] text-white shadow-4xl relative overflow-hidden group shadow-indigo-500/20">
-                {/* Custom premium gradient background for this card */}
-                <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-900 group-hover:scale-110 transition-transform duration-[3000ms]"></div>
-                <div className="relative z-10 space-y-8">
-                  <div className="flex items-center space-x-6">
-                    <div className="w-16 h-16 bg-white/10 backdrop-blur-3xl rounded-[28px] flex items-center justify-center border border-white/20 shadow-2xl transition-transform group-hover:-rotate-12">
-                      <svg className="w-9 h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                    </div>
-                    <div className="space-y-1">
-                      <h5 className="text-2xl font-black tracking-tight uppercase">Architect Voice</h5>
-                      <p className="text-[10px] text-white/40 uppercase tracking-[0.4em] font-black">Advisory Protocol</p>
-                    </div>
-                  </div>
-                  <p className="text-2xl text-white font-black leading-tight italic tracking-tight antialiased">
-                    <span className="text-white/30 text-4xl mr-1">"</span>
-                    Your vision suggests a decoupled microservices approach. Prioritize the core ingress validation before optimizing visual state.
-                    <span className="text-white/30 text-4xl ml-1">"</span>
-                  </p>
                 </div>
               </div>
             </div>
-          </div>
         )}
-      </div>
+          </div>
     </div>
-  );
+      );
 };
 
-export default ProjectConsole;
+      export default ProjectConsole;

@@ -11,6 +11,7 @@ import { ProjectTask } from './types';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'roadmap' | 'project' | 'mentor' | 'stats'>('roadmap');
+  const [lastTab, setLastTab] = useState(activeTab);
 
   // Persistence Layer
   const [projectIdea, setProjectIdea] = useState<string>(() => localStorage.getItem('odyssey_project_idea') || '');
@@ -37,6 +38,15 @@ const App: React.FC = () => {
     localStorage.setItem('odyssey_roadmap', JSON.stringify(roadmap));
     localStorage.setItem('odyssey_xp', xp.toString());
   }, [projectIdea, projectTasks, roadmap, xp]);
+
+  useEffect(() => {
+    if (activeTab !== lastTab) {
+      const click = new Audio('data:audio/mp3;base64,SUQzBAAAAAABAFRYWFgAAAASAAADbWFqb3JfYnJhbmQAZGFzaABUWFhYAAAAEgAAA21pbm9yX3ZlcnNpb24AMABUWFhYAAAAHAAAA2NvbXBhdGlibGVfYnJhbmRzAGlzbzZtcDQxAFRTU0UAAAAPAAADTGF2ZjYwLjMuMTAwAAAAAAAAAAAAAAD/+00AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYXBpbmcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+00fAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYXBpbmcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+00fAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYXBpbmcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+      click.volume = 0.05;
+      click.play().catch(() => { });
+      setLastTab(activeTab);
+    }
+  }, [activeTab, lastTab]);
 
   useEffect(() => {
     if (onboarding) {
