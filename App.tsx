@@ -256,10 +256,11 @@ const App: React.FC = () => {
       {/* Floating Sidebar Toggle Button */}
       <button
         onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-        className={`fixed top-1/2 -translate-y-1/2 z-[101] w-10 h-20 bg-slate-900/90 backdrop-blur-xl border border-white/10 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 transition-all duration-300 shadow-2xl ${sidebarCollapsed ? 'left-0 rounded-r-2xl' : 'left-[288px] lg:left-[288px] rounded-r-2xl'}`}
+        className={`fixed top-1/2 -translate-y-1/2 z-[101] w-12 h-24 bg-slate-900/95 backdrop-blur-xl border border-white/20 flex items-center justify-center text-slate-300 hover:text-white hover:bg-indigo-600/80 hover:border-indigo-500/50 transition-all duration-300 shadow-2xl hover:shadow-indigo-500/30 ${sidebarCollapsed ? 'left-0 rounded-r-2xl border-l-0' : 'left-[288px] lg:left-[288px] rounded-r-2xl border-l-0'}`}
+        title={sidebarCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
       >
-        <svg className={`w-5 h-5 transition-transform ${sidebarCollapsed ? 'rotate-0' : 'rotate-180'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        <svg className={`w-6 h-6 transition-transform duration-300 ${sidebarCollapsed ? 'rotate-0' : 'rotate-180'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
         </svg>
       </button>
 

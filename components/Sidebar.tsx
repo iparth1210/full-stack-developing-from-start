@@ -29,7 +29,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, onLaunchAnti
           <h1 className="hidden lg:block text-2xl font-black tracking-tighter premium-gradient-text uppercase">
             ODYSSEY.OS
           </h1>
-          <p className="hidden lg:block text-[9px] font-bold text-slate-500 tracking-[0.4em] uppercase opacity-60">Elite Education</p>
+          <p className="hidden lg:block text-[10px] font-black text-slate-400 tracking-[0.4em] uppercase">Elite Education</p>
         </div>
       </div>
 
@@ -39,8 +39,8 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, onLaunchAnti
             <button
               onClick={() => setActiveTab(item.id)}
               className={`w-full flex items-center justify-between px-5 py-4 rounded-2xl transition-all duration-300 relative ${activeTab === item.id
-                ? 'premium-glass text-white border-white/10 shadow-lg bg-indigo-500/10'
-                : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
+                ? 'premium-glass text-white border-white/10 shadow-lg shadow-indigo-500/10 bg-indigo-500/10'
+                : 'text-slate-300 hover:text-white hover:bg-white/[0.05]'
                 }`}
             >
               <div className="flex items-center lg:space-x-4">
