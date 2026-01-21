@@ -13,6 +13,20 @@ const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'roadmap' | 'project' | 'mentor' | 'stats'>('roadmap');
   const [lastTab, setLastTab] = useState(activeTab);
 
+  // Singularity Pass: Ambient Audio Ref
+  const ambientRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    if (!onboarding) {
+      if (!ambientRef.current) {
+        ambientRef.current = new Audio('data:audio/mp3;base64,SUQzBAAAAAABAFRYWFgAAAASAAADbWFqb3JfYnJhbmQAZGFzaABUWFhYAAAAEgAAA21pbm9yX3ZlcnNpb24AMABUWFhYAAAAHAAAA2NvbXBhdGlibGVfYnJhbmRzAGlzbzZtcDQxAFRTU0UAAAAPAAADTGF2ZjYwLjMuMTAwAAAAAAAAAAAAAAD/+00AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYXBpbmcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+00fAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYXBpbmcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+00fAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYXBpbmcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+        ambientRef.current.loop = true;
+        ambientRef.current.volume = 0.03;
+      }
+      ambientRef.current.play().catch(() => { });
+    }
+  }, [onboarding]);
+
   // Persistence Layer
   const [projectIdea, setProjectIdea] = useState<string>(() => localStorage.getItem('odyssey_project_idea') || '');
   const [projectTasks, setProjectTasks] = useState<ProjectTask[]>(() => {
@@ -108,11 +122,16 @@ const App: React.FC = () => {
 
   return (
     <div className="flex min-h-screen bg-[#020617] text-slate-100 overflow-hidden relative font-['Outfit']">
-      {/* Immersive Background Effects */}
+      {/* Adaptive Nebula Background */}
       <div className="fixed inset-0 pointer-events-none -z-10">
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-600/20 rounded-full blur-[200px] animate-nebula"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-purple-600/20 rounded-full blur-[250px] animate-nebula [animation-delay:4s]"></div>
-        <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-cyan-600/10 rounded-full blur-[150px] animate-nebula [animation-delay:8s]"></div>
+        <div className={`absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full blur-[200px] animate-nebula transition-colors duration-[2000ms] ${activeTab === 'roadmap' ? 'bg-indigo-600/20' :
+            activeTab === 'project' ? 'bg-cyan-600/20' :
+              activeTab === 'mentor' ? 'bg-purple-600/20' : 'bg-emerald-600/20'
+          }`}></div>
+        <div className={`absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full blur-[250px] animate-nebula [animation-delay:4s] transition-colors duration-[2000ms] ${activeTab === 'roadmap' ? 'bg-purple-600/20' :
+            activeTab === 'project' ? 'bg-indigo-600/20' :
+              activeTab === 'mentor' ? 'bg-emerald-600/20' : 'bg-cyan-600/20'
+          }`}></div>
 
         {/* Subtle Grid Pattern */}
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
