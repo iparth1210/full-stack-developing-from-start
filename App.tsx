@@ -155,6 +155,8 @@ const App: React.FC = () => {
           activeTab={activeTab}
           setActiveTab={(tab) => { setActiveTab(tab); setMobileMenuOpen(false); }}
           onLaunchAntigravity={() => { setIsAntigravity(true); setMobileMenuOpen(false); }}
+          intensity={neuralIntensity}
+          setIntensity={setNeuralIntensity}
         />
       </div>
 
