@@ -33,26 +33,62 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, onLaunchAnti
         </div>
       </div>
 
-      <nav className="flex-1 px-4 space-y-2">
+      <nav className="flex-1 px-4 space-y-3">
         {items.map((item) => (
-          <button
-            key={item.id}
-            onClick={() => setActiveTab(item.id)}
-            className={`w-full flex items-center lg:space-x-4 px-5 py-4 rounded-2xl transition-all duration-300 relative group/btn ${activeTab === item.id
-              ? 'premium-glass text-white border-white/10 shadow-lg'
-              : 'text-slate-500 hover:text-slate-300 hover:bg-white/[0.03]'
-              }`}
-          >
-            <div className={`transition-all duration-300 ${activeTab === item.id ? 'scale-110 text-indigo-400' : 'group-hover/btn:scale-110 glitch-hover'}`}>
-              <svg className="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={item.icon} />
-              </svg>
+          <div key={item.id} className="relative group/nav">
+            <button
+              onClick={() => setActiveTab(item.id)}
+              className={`w-full flex items-center justify-between px-5 py-4 rounded-2xl transition-all duration-300 relative ${activeTab === item.id
+                ? 'premium-glass text-white border-white/10 shadow-lg bg-indigo-500/10'
+                : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
+                }`}
+            >
+              <div className="flex items-center lg:space-x-4">
+                <div className={`transition-all duration-300 ${activeTab === item.id ? 'scale-110 text-indigo-400' : 'group-hover/nav:scale-110'}`}>
+                  <svg className="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
+                  </svg>
+                </div>
+                <span className="hidden lg:block font-black text-sm tracking-tight">{item.label}</span>
+              </div>
+
+              {/* 3-Dot Menu Button */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const dropdown = document.getElementById(`nav-dropdown-${item.id}`);
+                  document.querySelectorAll('[id^="nav-dropdown-"]').forEach(el => {
+                    if (el.id !== `nav-dropdown-${item.id}`) el.classList.add('hidden');
+                  });
+                  dropdown?.classList.toggle('hidden');
+                }}
+                className="hidden lg:flex w-8 h-8 rounded-lg bg-white/5 items-center justify-center text-slate-500 hover:text-white hover:bg-white/10 transition-all"
+              >
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="4" r="1.5" /><circle cx="10" cy="10" r="1.5" /><circle cx="10" cy="16" r="1.5" /></svg>
+              </button>
+
+              {activeTab === item.id && (
+                <div className="absolute left-0 w-1.5 h-8 bg-indigo-500 rounded-full shadow-[0_0_15px_rgba(99,102,241,1)]"></div>
+              )}
+            </button>
+
+            {/* Dropdown Menu */}
+            <div id={`nav-dropdown-${item.id}`} className="hidden absolute left-full top-0 ml-2 w-48 premium-glass border border-white/10 rounded-xl shadow-2xl z-50 p-2 animate-in fade-in slide-in-from-left-2 duration-200">
+              <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest px-3 py-2">{item.label} Options</div>
+              <button className="w-full p-3 rounded-lg text-left text-sm font-bold text-slate-300 hover:bg-white/5 hover:text-white transition-all flex items-center gap-3">
+                <svg className="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                View Details
+              </button>
+              <button className="w-full p-3 rounded-lg text-left text-sm font-bold text-slate-300 hover:bg-white/5 hover:text-white transition-all flex items-center gap-3">
+                <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                Refresh Data
+              </button>
+              <button className="w-full p-3 rounded-lg text-left text-sm font-bold text-slate-300 hover:bg-white/5 hover:text-white transition-all flex items-center gap-3">
+                <svg className="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+                Share Progress
+              </button>
             </div>
-            <span className="hidden lg:block font-bold text-sm tracking-tight">{item.label}</span>
-            {activeTab === item.id && (
-              <div className="absolute left-0 w-1.5 h-6 bg-indigo-500 rounded-full shadow-[0_0_12px_rgba(99,102,241,1)]"></div>
-            )}
-          </button>
+          </div>
         ))}
       </nav>
 
