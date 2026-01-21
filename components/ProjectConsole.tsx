@@ -101,19 +101,17 @@ const ProjectConsole: React.FC<ProjectConsoleProps> = ({ projectIdea, setProject
     <div className="h-full overflow-y-auto scrollbar-hide py-12 lg:py-16">
       <div className="managed-container flex flex-col min-h-full">
         <header className="mb-20 flex flex-col lg:flex-row items-start lg:items-end justify-between gap-16 border-b border-white/5 pb-16">
-          <div className="space-y-8">
-            <div className="inline-flex items-center space-x-4 premium-glass px-6 py-2.5 rounded-full border-indigo-500/20 text-indigo-400 text-[11px] font-black uppercase tracking-[0.4em]">
-              <span className="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-pulse shadow-[0_0_15px_rgba(99,102,241,1)]"></span>
-              <span>Architectural Hub 01</span>
+          <div className="space-y-6">
+            <h2 className="text-7xl lg:text-9xl font-black text-white tracking-tighter leading-[0.85] antialiased">
+              Masterpiece<span className="premium-gradient-text">.</span>
+            </h2>
+            <div className="flex items-center space-x-4">
+              <div className="h-px w-24 bg-indigo-500/40"></div>
+              <p className="text-slate-500 text-sm font-black uppercase tracking-[0.5em] italic">Architectural Hub 01</p>
             </div>
-            <div className="space-y-4">
-              <h2 className="text-7xl lg:text-8xl font-black text-white tracking-tighter leading-[0.9] antialiased">
-                The Masterpiece<span className="premium-gradient-text">.</span>
-              </h2>
-              <p className="text-slate-400 text-2xl max-w-3xl font-medium leading-relaxed opacity-80 decoration-indigo-500/10 underline underline-offset-8">
-                Manifesting silent visions into high-concurrency silicon reality. This is the terminal of raw creation.
-              </p>
-            </div>
+            <p className="text-slate-400 text-xl max-w-2xl font-medium leading-relaxed opacity-80 border-l-2 border-indigo-500/20 pl-8">
+              Manifesting silent visions into high-concurrency silicon reality. This is the terminal of raw creation.
+            </p>
           </div>
 
           {projectIdea && tasks.length > 0 && (
@@ -344,6 +342,10 @@ const ProjectConsole: React.FC<ProjectConsoleProps> = ({ projectIdea, setProject
                     TERMINATE SYSTEM
                   </button>
                 </div>
+
+                {/* Terminal Corner HUD Decor */}
+                <div className="absolute top-6 right-6 w-12 h-12 border-t-2 border-r-2 border-indigo-500/20 rounded-tr-3xl pointer-events-none"></div>
+                <div className="absolute bottom-6 left-6 w-12 h-12 border-b-2 border-l-2 border-indigo-500/20 rounded-bl-3xl pointer-events-none"></div>
               </div>
 
               <div className="p-16 premium-gradient rounded-[72px] text-white shadow-4xl relative overflow-hidden group shadow-indigo-500/20">
