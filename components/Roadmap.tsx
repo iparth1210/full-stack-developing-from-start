@@ -18,9 +18,21 @@ const Roadmap: React.FC<RoadmapProps> = ({ modules, setRoadmap, onComplete }) =>
   const [showExplanation, setShowExplanation] = useState(false);
   const [isAudioLoading, setIsAudioLoading] = useState(false);
   const [shakeQuiz, setShakeQuiz] = useState(false);
-  const [completing, setCompleting] = useState(false);
-
   const contentContainerRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    const el = e.currentTarget;
+    const rect = el.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const tiltX = (y - centerY) / 10;
+    const tiltY = (centerX - x) / 10;
+
+    el.style.setProperty('--tilt-x', `${tiltX}deg`);
+    el.style.setProperty('--tilt-y', `${tiltY}deg`);
+  };
 
   const [completedDays, setCompletedDays] = useState<Record<string, Set<number>>>({
     'm0': new Set([1])
@@ -128,8 +140,9 @@ const Roadmap: React.FC<RoadmapProps> = ({ modules, setRoadmap, onComplete }) =>
                 <button
                   key={mod.id}
                   disabled={isLocked}
+                  onMouseMove={handleMouseMove}
                   onClick={() => { setSelectedModuleId(mod.id); setSelectedDayNumber(1); }}
-                  className={`w-full group p-5 rounded-2xl text-left border transition-all duration-500 relative overflow-hidden ${isSelected
+                  className={`w-full group p-5 rounded-2xl text-left border transition-all duration-500 relative overflow-hidden gaze-tilt ${isSelected
                     ? 'bg-indigo-500/10 border-indigo-500/40 shadow-[0_10px_30px_rgba(99,102,241,0.2)] scale-[1.02]'
                     : isLocked
                       ? 'border-transparent opacity-30 grayscale cursor-not-allowed'
@@ -168,8 +181,9 @@ const Roadmap: React.FC<RoadmapProps> = ({ modules, setRoadmap, onComplete }) =>
               return (
                 <button
                   key={day.day}
+                  onMouseMove={handleMouseMove}
                   onClick={() => { setSelectedDayNumber(day.day); setQuizAnswer(null); setShowExplanation(false); setActiveMode('theory'); }}
-                  className={`relative aspect-square rounded-2xl flex items-center justify-center text-[11px] font-black transition-all duration-500 group ${isSelected
+                  className={`relative aspect-square rounded-2xl flex items-center justify-center text-[11px] font-black transition-all duration-500 group gaze-tilt ${isSelected
                     ? 'bg-indigo-500 text-white shadow-[0_10px_25px_rgba(99,102,241,0.5)] scale-110 z-10'
                     : isCompleted
                       ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20'
