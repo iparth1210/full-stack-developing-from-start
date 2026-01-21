@@ -10,10 +10,10 @@ const generatePlaceholderDays = (month: number, startDay: number, count: number)
     funnyStory: "Dave the Accountant tried to build a database in Excel. He currently has 4 million rows and his laptop is actually hovering off the desk from the fan heat.",
     storyImageUrl: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800",
     practicalUsage: "Building high-performance data systems.",
-    detailedTheory: [{ 
-      title: "Data Sequence Alpha", 
-      description: "Unit decoding in progress...", 
-      imageUrl: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800" 
+    detailedTheory: [{
+      title: "Data Sequence Alpha",
+      description: "Unit decoding in progress...",
+      imageUrl: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800"
     }],
     resources: []
   }));
@@ -52,8 +52,8 @@ const generateMonth0Days = (): DailyTask[] => {
         }
       ],
       resources: [
-        { 
-          type: 'video', label: 'How Transistors Work', url: 'https://www.youtube.com/watch?v=IcrBqCFLHIY', embedId: 'IcrBqCFLHIY', provider: 'Veritasium', difficulty: 'Beginner', duration: '8:15', thumbnail: 'https://img.youtube.com/vi/IcrBqCFLHIY/maxresdefault.jpg' 
+        {
+          type: 'video', label: 'How Transistors Work', url: 'https://www.youtube.com/watch?v=IcrBqCFLHIY', embedId: 'IcrBqCFLHIY', provider: 'Veritasium', difficulty: 'Beginner', duration: '8:15', thumbnail: 'https://img.youtube.com/vi/IcrBqCFLHIY/maxresdefault.jpg'
         },
         {
           type: 'article', label: 'The History of the MOSFET', url: 'https://en.wikipedia.org/wiki/MOSFET', difficulty: 'Intermediate', provider: 'Technical History'
@@ -111,6 +111,42 @@ const generateMonth0Days = (): DailyTask[] => {
   ];
 };
 
+const generateMonth1Days = (): DailyTask[] => {
+  return [
+    {
+      day: 1,
+      title: "Kernel Genesis: The Ring 0 Authority",
+      objective: "Master the concept of privilege levels and the kernel's role as the system's absolute ruler.",
+      conceptualWhy: "In a computer, someone has to be the boss. The kernel is the god-protocol that manages every electron and memory cell.",
+      funnyStory: "Think of the CPU like a high-end restaurant. You (the User App) are the customer. You can't just walk into the kitchen (Hardware) and start flipping burgers. You have to ask the Waiter (The Kernel) to do it for you. This is called a System Call.",
+      storyImageUrl: "https://images.unsplash.com/photo-1518433278988-78ef99ea0524?auto=format&fit=crop&q=80&w=800",
+      practicalUsage: "Optimizing application performance by understanding context switching and overhead.",
+      detailedTheory: [
+        {
+          title: "Privilege Rings",
+          description: "x86 architecture uses 'Rings' to enforce security. Ring 3 is where your browser and games live (User Mode). Ring 0 is the 'inner sanctum'Reserved for the Kernel. Moving between these rings requires a 'Trap' or 'Interrupt', which is a costly procedure for the CPU.",
+          imageUrl: "https://images.unsplash.com/photo-1558494949-ef0109556754?auto=format&fit=crop&q=80&w=800"
+        },
+        {
+          title: "The System Call Interface",
+          description: "Syscalls are the API of the OS. When you write `console.log` in JS, it eventually becomes a `write()` syscall. The CPU triggers a software interrupt, switches to Ring 0, and the kernel takes over to talk to the screen hardware.",
+          imageUrl: "https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&q=80&w=800"
+        }
+      ],
+      resources: [
+        { type: 'video', label: 'What is an Operating System?', url: 'https://www.youtube.com/watch?v=26QPDBe-NB8', embedId: '26QPDBe-NB8', provider: 'PowerPoint', difficulty: 'Beginner', duration: '12:00', thumbnail: 'https://img.youtube.com/vi/26QPDBe-NB8/maxresdefault.jpg' }
+      ],
+      quiz: {
+        question: "In which 'Ring' does the Operating System Kernel typically operate?",
+        options: ["Ring 3", "Ring 1", "Ring 0", "The Outer Ring"],
+        correctIndex: 2,
+        explanation: "Ring 0 provides the highest level of privilege, allowing the kernel to execute restricted instructions and manage hardware directly."
+      }
+    },
+    ...generatePlaceholderDays(1, 2, 29)
+  ];
+};
+
 export const INITIAL_ROADMAP: RoadmapModule[] = [
   {
     id: 'm0',
@@ -122,10 +158,26 @@ export const INITIAL_ROADMAP: RoadmapModule[] = [
     practicalUsage: 'System performance.',
     topics: ['Transistors', 'Logic Gates', 'Binary'],
     skills: ['Architecture', 'Logic'],
-    status: ModuleStatus.CURRENT,
+    status: ModuleStatus.COMPLETED,
     previewImage: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=1200',
     dailySchedule: generateMonth0Days(),
     masteryProject: { title: 'Logic Lab', description: 'Build an 8-bit adder.' },
+    resources: []
+  },
+  {
+    id: 'm1',
+    month: 1,
+    title: 'The Binary Cathedral: Systems',
+    description: 'Master the operating systems and kernel interfaces.',
+    conceptualWhy: 'The OS is the traffic controller. Without it, every app would be fighting for the same memory like a digital bar fight.',
+    funnyStory: 'The Waiter and the Burger.',
+    practicalUsage: 'High-concurrency systems.',
+    topics: ['Kernels', 'Syscalls', 'Memory Management'],
+    skills: ['OS', 'Performance'],
+    status: ModuleStatus.CURRENT,
+    previewImage: 'https://images.unsplash.com/photo-1518433278988-78ef99ea0524?auto=format&fit=crop&q=80&w=1200',
+    dailySchedule: generateMonth1Days(),
+    masteryProject: { title: 'Kernel Bridge', description: 'Implement a basic shell.' },
     resources: []
   }
 ];

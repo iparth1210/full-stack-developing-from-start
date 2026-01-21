@@ -78,7 +78,7 @@ const MentorChat: React.FC<MentorChatProps> = ({ context }) => {
               <span className="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-pulse shadow-[0_0_12px_indigo]"></span>
               <span>Neural Advisory Active</span>
             </div>
-            <h2 className="text-3xl lg:text-4xl font-black text-white tracking-tighter antialiased">Master Architect<span className="premium-gradient-text">.</span></h2>
+            <h2 className="text-3xl lg:text-4xl font-black text-white tracking-tighter antialiased glitch-text" data-text="Master Architect.">Master Architect<span className="premium-gradient-text">.</span></h2>
           </div>
         </div>
 

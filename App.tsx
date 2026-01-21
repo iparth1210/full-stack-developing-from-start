@@ -13,9 +13,11 @@ const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'roadmap' | 'project' | 'mentor' | 'stats'>('roadmap');
   const [projectIdea, setProjectIdea] = useState<string>('');
   const [projectTasks, setProjectTasks] = useState<ProjectTask[]>([]);
+  const [roadmap, setRoadmap] = useState(INITIAL_ROADMAP);
   const [xp, setXp] = useState(45200);
   const [showXpAlert, setShowXpAlert] = useState(false);
   const [isAntigravity, setIsAntigravity] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const addXp = (amount: number) => {
     setXp(prev => prev + amount);
@@ -26,13 +28,13 @@ const App: React.FC = () => {
   const renderContent = () => {
     switch (activeTab) {
       case 'roadmap':
-        return <Roadmap modules={INITIAL_ROADMAP} onComplete={addXp} />;
+        return <Roadmap modules={roadmap} onComplete={addXp} />;
       case 'project':
         return <ProjectConsole projectIdea={projectIdea} setProjectIdea={setProjectIdea} tasks={projectTasks} setTasks={setProjectTasks} />;
       case 'mentor':
-        return <MentorChat context={`Focused on Month 0. Hardware and logic fundamentals. Current XP: ${xp}. Project: ${projectIdea}`} />;
+        return <MentorChat context={`Active Module: ${roadmap.find(m => m.status === 'CURRENT')?.title || 'None'}. Project: ${projectIdea}`} />;
       case 'stats':
-        return <Stats />;
+        return <Stats xp={xp} tasks={projectTasks} roadmap={roadmap} />;
       default:
         return null;
     }
@@ -60,11 +62,20 @@ const App: React.FC = () => {
         />
       )}
 
-      <Sidebar
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        onLaunchAntigravity={() => setIsAntigravity(true)}
-      />
+      <div className={`fixed inset-y-0 left-0 z-[100] transform ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform duration-500 ease-in-out`}>
+        <Sidebar
+          activeTab={activeTab}
+          setActiveTab={(tab) => { setActiveTab(tab); setMobileMenuOpen(false); }}
+          onLaunchAntigravity={() => { setIsAntigravity(true); setMobileMenuOpen(false); }}
+        />
+      </div>
+
+      {mobileMenuOpen && (
+        <div
+          className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[90] lg:hidden"
+          onClick={() => setMobileMenuOpen(false)}
+        ></div>
+      )}
 
       <main className="flex-1 min-w-0 relative h-screen overflow-hidden flex flex-col">
         {/* Cinematic Mastery Notification */}
@@ -84,15 +95,21 @@ const App: React.FC = () => {
 
         <header className="h-24 border-b border-white/5 flex items-center justify-between px-6 lg:px-12 bg-slate-950/40 backdrop-blur-3xl z-50">
           <div className="flex items-center space-x-4 lg:space-x-6">
+            <button
+              onClick={() => setMobileMenuOpen(true)}
+              className="lg:hidden w-10 h-10 flex items-center justify-center text-white premium-glass rounded-xl"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" /></svg>
+            </button>
             <div className="flex items-baseline space-x-2 lg:space-x-3">
               <span className="premium-gradient-text text-[10px] lg:text-sm tracking-[0.2em]">ODYSSEY_PLATFORM</span>
               <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest opacity-40">v2.4.0</span>
             </div>
             <div className="hidden sm:block w-px h-6 bg-white/10"></div>
-            <h4 className="hidden sm:block text-white text-[10px] font-black uppercase tracking-[0.4em] opacity-80">{activeTab}</h4>
+            <h4 className="hidden lg:block text-white text-[10px] font-black uppercase tracking-[0.4em] opacity-80">{activeTab}</h4>
           </div>
 
-          <div className="flex items-center space-x-6 lg:space-x-12">
+          <div className="flex items-center space-x-4 lg:space-x-12">
             <div className="hidden md:flex flex-col items-end">
               <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest opacity-60">Global Ranking</span>
               <span className="text-sm font-black text-indigo-400 tracking-tighter">SCHOLAR TIER [IV]</span>
