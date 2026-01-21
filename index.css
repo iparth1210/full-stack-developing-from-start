@@ -44,6 +44,18 @@
     background-image: url('https://grainy-gradients.vercel.app/noise.svg');
     animation: noise-move 0.2s infinite;
   }
+
+  /* Cinematic Vignette Overlay */
+  body::before {
+    content: "";
+    @apply fixed inset-0 pointer-events-none z-[1001];
+    background: radial-gradient(circle at center, transparent 30%, rgba(2, 6, 23, 0.4) 100%);
+  }
+
+  /* Custom Selection Theme */
+  ::selection {
+    @apply bg-indigo-500/40 text-white;
+  }
 }
 
 @keyframes noise-move {
@@ -317,7 +329,7 @@ h1 {
 }
 
 .managed-container {
-  @apply max-w-7xl mx-auto px-6 lg:px-12 w-full;
+  @apply max-w-[1800px] mx-auto px-6 lg:px-12 w-full transition-all duration-700;
 }
 
 @keyframes pulse-glow {
