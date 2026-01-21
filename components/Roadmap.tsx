@@ -6,12 +6,22 @@ import { getVoiceBriefing } from '../services/geminiService';
 interface RoadmapProps {
   modules: RoadmapModule[];
   setRoadmap: (roadmap: RoadmapModule[]) => void;
+  selectedModuleId: string | null;
+  setSelectedModuleId: (id: string | null) => void;
+  selectedDayNumber: number;
+  setSelectedDayNumber: (day: number) => void;
   onComplete?: (xp: number) => void;
 }
 
-const Roadmap: React.FC<RoadmapProps> = ({ modules, setRoadmap, onComplete }) => {
-  const [selectedModuleId, setSelectedModuleId] = useState<string | null>(modules[1]?.id || modules[0]?.id || null);
-  const [selectedDayNumber, setSelectedDayNumber] = useState<number>(1);
+const Roadmap: React.FC<RoadmapProps> = ({
+  modules,
+  setRoadmap,
+  selectedModuleId,
+  setSelectedModuleId,
+  selectedDayNumber,
+  setSelectedDayNumber,
+  onComplete
+}) => {
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
   const [activeMode, setActiveMode] = useState<'theory' | 'story' | 'usage' | 'quiz'>('theory');
   const [quizAnswer, setQuizAnswer] = useState<number | null>(null);

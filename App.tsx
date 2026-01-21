@@ -38,6 +38,10 @@ const App: React.FC = () => {
   const [isSurge, setIsSurge] = useState(false);
   const [parallax, setParallax] = useState({ x: 0, y: 0 });
 
+  // Navigation Deep-Linking
+  const [selectedModuleId, setSelectedModuleId] = useState<string | null>(null);
+  const [selectedDayNumber, setSelectedDayNumber] = useState<number>(1);
+
   // Singularity Pass: Ambient Audio Ref
   const ambientRef = useRef<HTMLAudioElement | null>(null);
 
@@ -127,18 +131,26 @@ const App: React.FC = () => {
   const renderContent = () => {
     switch (activeTab) {
       case 'roadmap':
-        return <Roadmap modules={roadmap} setRoadmap={setRoadmap} onComplete={(amount) => {
-          addXp(amount);
-          setRoadmap(prev => {
-            const next = [...prev];
-            const currentModule = next.find(m => m.status === 'CURRENT');
-            if (currentModule) {
-              currentModule.progress = Math.min(currentModule.progress + 15, 100);
-              if (currentModule.progress === 100) currentModule.status = 'COMPLETED';
-            }
-            return next;
-          });
-        }} />;
+        return <Roadmap
+          modules={roadmap}
+          setRoadmap={setRoadmap}
+          selectedModuleId={selectedModuleId || roadmap[1]?.id || roadmap[0]?.id}
+          setSelectedModuleId={setSelectedModuleId}
+          selectedDayNumber={selectedDayNumber}
+          setSelectedDayNumber={setSelectedDayNumber}
+          onComplete={(amount) => {
+            addXp(amount);
+            setRoadmap(prev => {
+              const next = [...prev];
+              const currentModule = next.find(m => m.status === 'CURRENT');
+              if (currentModule) {
+                currentModule.progress = Math.min(currentModule.progress + 15, 100);
+                if (currentModule.progress === 100) currentModule.status = 'COMPLETED';
+              }
+              return next;
+            });
+          }}
+        />;
       case 'project':
         return <ProjectConsole projectIdea={projectIdea} setProjectIdea={setProjectIdea} tasks={projectTasks} setTasks={setProjectTasks} />;
       case 'mentor':
@@ -319,9 +331,17 @@ const App: React.FC = () => {
       <CommandPalette
         isOpen={commandPaletteOpen}
         onClose={() => setCommandPaletteOpen(false)}
-        onSelectAction={(id) => {
-          if (id === 'antigravity') setIsAntigravity(true);
-          else setActiveTab(id as any);
+        modules={roadmap}
+        tasks={projectTasks}
+        onSelectAction={(id, type, metadata) => {
+          if (type === 'navigation') {
+            if (id === 'antigravity') setIsAntigravity(true);
+            else setActiveTab(id as any);
+          } else if (type === 'roadmap') {
+            setActiveTab('roadmap');
+            if (metadata?.moduleId) setSelectedModuleId(metadata.moduleId);
+            if (metadata?.day) setSelectedDayNumber(metadata.day);
+          }
         }}
       />
 

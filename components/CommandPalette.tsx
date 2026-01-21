@@ -1,28 +1,69 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 
+import { RoadmapModule, ProjectTask } from '../types';
+
 interface CommandPaletteProps {
     isOpen: boolean;
     onClose: () => void;
-    onSelectAction: (actionId: string) => void;
+    modules: RoadmapModule[];
+    tasks: ProjectTask[];
+    onSelectAction: (id: string, type: 'navigation' | 'roadmap' | 'task', metadata?: any) => void;
 }
 
-const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose, onSelectAction }) => {
+const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose, modules, tasks, onSelectAction }) => {
     const [query, setQuery] = useState('');
     const inputRef = useRef<HTMLInputElement>(null);
 
     const actions = [
-        { id: 'roadmap', label: 'Access Roadmap', category: 'Navigation', shortcut: 'R' },
-        { id: 'project', label: 'Initialize Masterpiece', category: 'Project', shortcut: 'P' },
-        { id: 'mentor', label: 'Consult Neural Mentor', category: 'AI', shortcut: 'M' },
-        { id: 'stats', label: 'View Growth Diagnostics', category: 'Stats', shortcut: 'G' },
-        { id: 'antigravity', label: 'Execute Antigravity Portal', category: 'System', shortcut: 'A' },
+        { id: 'roadmap', label: 'Access Roadmap', category: 'Navigation', shortcut: 'R', type: 'navigation' as const },
+        { id: 'project', label: 'Initialize Masterpiece', category: 'Project', shortcut: 'P', type: 'navigation' as const },
+        { id: 'mentor', label: 'Consult Neural Mentor', category: 'AI', shortcut: 'M', type: 'navigation' as const },
+        { id: 'stats', label: 'View Growth Diagnostics', category: 'Stats', shortcut: 'G', type: 'navigation' as const },
+        { id: 'antigravity', label: 'Execute Antigravity Portal', category: 'System', shortcut: 'A', type: 'navigation' as const },
     ];
 
-    const filtered = actions.filter(a =>
-        a.label.toLowerCase().includes(query.toLowerCase()) ||
-        a.category.toLowerCase().includes(query.toLowerCase())
-    );
+    const searchResults = React.useMemo(() => {
+        if (!query) return actions;
+
+        const q = query.toLowerCase();
+        const results: any[] = [];
+
+        // 1. Search Actions
+        actions.forEach(a => {
+            if (a.label.toLowerCase().includes(q) || a.category.toLowerCase().includes(q)) {
+                results.push(a);
+            }
+        });
+
+        // 2. Search Roadmap Modules
+        modules.forEach(m => {
+            if (m.title.toLowerCase().includes(q)) {
+                results.push({
+                    id: m.id,
+                    label: `Jump to: ${m.title}`,
+                    category: 'Roadmap',
+                    shortcut: 'STRM',
+                    type: 'roadmap',
+                    metadata: { moduleId: m.id, day: 1 }
+                });
+            }
+            m.dailySchedule?.forEach(d => {
+                if (d.title.toLowerCase().includes(q)) {
+                    results.push({
+                        id: `${m.id}-day-${d.day}`,
+                        label: `Module Node: ${d.title}`,
+                        category: `Roadmap // ${m.title}`,
+                        shortcut: `D${d.day}`,
+                        type: 'roadmap',
+                        metadata: { moduleId: m.id, day: d.day }
+                    });
+                }
+            });
+        });
+
+        return results.slice(0, 8);
+    }, [query, modules]);
 
     useEffect(() => {
         if (isOpen) {
@@ -61,20 +102,20 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose, onSele
                 </div>
 
                 <div className="max-h-[50vh] overflow-y-auto p-4 space-y-2">
-                    {filtered.length > 0 ? (
-                        filtered.map((action) => (
+                    {searchResults.length > 0 ? (
+                        searchResults.map((result) => (
                             <button
-                                key={action.id}
-                                onClick={() => { onSelectAction(action.id); onClose(); }}
+                                key={result.id}
+                                onClick={() => { onSelectAction(result.id, result.type, result.metadata); onClose(); }}
                                 className="w-full group flex items-center justify-between p-6 rounded-[28px] hover:bg-white/[0.05] transition-all duration-300 text-left"
                             >
                                 <div className="flex items-center space-x-6">
                                     <div className="w-12 h-12 bg-indigo-500/10 rounded-2xl flex items-center justify-center border border-indigo-500/20 group-hover:scale-110 group-hover:rotate-12 transition-all duration-500">
-                                        <span className="text-xl font-black text-indigo-400">{action.shortcut}</span>
+                                        <span className="text-[10px] font-black text-indigo-400 uppercase">{result.shortcut}</span>
                                     </div>
                                     <div>
-                                        <h4 className="text-lg font-black text-white tracking-tight group-hover:text-indigo-400 transition-colors uppercase">{action.label}</h4>
-                                        <span className="text-[10px] font-bold text-white/20 uppercase tracking-[0.3em]">{action.category}</span>
+                                        <h4 className="text-lg font-black text-white tracking-tight group-hover:text-indigo-400 transition-colors uppercase">{result.label}</h4>
+                                        <span className="text-[10px] font-bold text-white/20 uppercase tracking-[0.3em]">{result.category}</span>
                                     </div>
                                 </div>
                                 <div className="opacity-0 group-hover:opacity-100 transition-opacity translate-x-4 group-hover:translate-x-0 duration-300">
