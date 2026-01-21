@@ -18,7 +18,7 @@ const ProjectConsole: React.FC<ProjectConsoleProps> = ({ projectIdea, setProject
   const [newIdea, setNewIdea] = useState(projectIdea);
   const [blueprintUrl, setBlueprintUrl] = useState<string | null>(null);
   const [selectedStyle, setSelectedStyle] = useState<BlueprintStyle>('blueprint');
-  const [logs, setLogs] = useState<{ id: string; text: string; type: 'info' | 'warn' | 'success' }[]>([]);
+  const [logs, setLogs] = useState<{ id: string | number; text: string; type: 'info' | 'warn' | 'success' }[]>([]);
   const logEndRef = useRef<HTMLDivElement>(null);
 
   const styles: { id: BlueprintStyle; label: string }[] = [
@@ -68,12 +68,29 @@ const ProjectConsole: React.FC<ProjectConsoleProps> = ({ projectIdea, setProject
   };
 
   const addLog = (text: string, type: 'info' | 'warn' | 'success') => {
-    setLogs(prev => [...prev.slice(-25), { id: Math.random().toString(), text, type }]);
+    setLogs(prev => [...prev.slice(-40), { id: Math.random().toString(), text, type }]);
   };
 
   useEffect(() => {
     if (logEndRef.current) logEndRef.current.scrollIntoView({ behavior: 'smooth' });
   }, [logs]);
+
+  useEffect(() => {
+    if (blueprintUrl) {
+      // Simulate Terminal Boot Sequence
+      const bootLogs = [
+        "INITIALIZING_VIRTUAL_DOM_SYNK...",
+        "AUTHENTICATING_CREATOR_KEY...",
+        "LOADING_SILICON_ARCHITECTURES...",
+        "SYSTEM_READY_FOR_MANIFESTATION."
+      ];
+      bootLogs.forEach((msg, i) => {
+        setTimeout(() => {
+          setLogs(prev => [...prev, { id: `boot-${Date.now()}-${i}`, text: msg, type: 'info' }]);
+        }, i * 250);
+      });
+    }
+  }, [blueprintUrl]);
 
   useEffect(() => {
     if (projectIdea) {
@@ -87,7 +104,7 @@ const ProjectConsole: React.FC<ProjectConsoleProps> = ({ projectIdea, setProject
           "SYNCHRONIZING KERNEL THREADS..."
         ];
         addLog(phrases[Math.floor(Math.random() * phrases.length)], 'info');
-      }, 12000);
+      }, 15000);
       return () => clearInterval(interval);
     }
   }, [projectIdea]);
@@ -128,7 +145,9 @@ const ProjectConsole: React.FC<ProjectConsoleProps> = ({ projectIdea, setProject
               <div className="w-px h-12 bg-white/10"></div>
               <div className="text-center">
                 <span className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Sync</span>
-                <span className="text-3xl font-black text-indigo-400 tracking-tighter">{Math.round((tasks.filter(t => t.completed).length / tasks.length) * 100)}%</span>
+                <span className="text-3xl font-black text-indigo-400 tracking-tighter">
+                  {Math.round((tasks.filter(t => t.completed).length / (tasks.length || 1)) * 100)}%
+                </span>
               </div>
             </div>
           )}
@@ -237,8 +256,6 @@ const ProjectConsole: React.FC<ProjectConsoleProps> = ({ projectIdea, setProject
                     </div>
                   )}
                   <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
-
-                  {/* Decorative Elements */}
                   <div className="absolute top-8 left-8 text-[8px] font-mono text-white/20 uppercase tracking-[0.5em] pointer-events-none">
                     AXIS_REF: {Math.random().toFixed(4)} • SYNC_AUTO: ON
                   </div>
@@ -299,7 +316,6 @@ const ProjectConsole: React.FC<ProjectConsoleProps> = ({ projectIdea, setProject
 
             <div className="lg:col-span-4 space-y-16">
               <div className="bg-slate-950/90 border border-white/10 rounded-[72px] p-16 h-[900px] flex flex-col shadow-4xl backdrop-blur-3xl relative overflow-hidden group/kernel">
-                {/* Terminal Overlay Effects */}
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(0,255,100,0.02),rgba(0,255,200,0.01),rgba(0,100,255,0.02))] z-0 pointer-events-none bg-[length:100%_4px,3px_100%]"></div>
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent animate-scan z-20"></div>
 
@@ -317,64 +333,63 @@ const ProjectConsole: React.FC<ProjectConsoleProps> = ({ projectIdea, setProject
                 <div className="flex-1 font-mono text-[11px] space-y-5 overflow-y-auto scrollbar-hide relative z-10 pr-2">
                   <div className="terminal-scroll space-y-5">
                     {logs.map((log) => (
-                      <div key={log.id} className={`flex space-x-5 animate-in slide-in-from-bottom-2 fade-in duration-300 ${log.type === 'success' ? 'text-emerald-400 text-glow-emerald' : log.type === 'warn' ? 'text-rose-400 text-glow-rose' : 'text-slate-500'
-                        }`}>
+                      <div key={log.id} className={`flex space-x-5 animate-in slide-in-from-bottom-2 fade-in duration-300 ${log.type === 'success' ? 'text-emerald-400 text-glow-emerald' : log.type === 'warn' ? 'text-rose-400 text-glow-rose' : 'text-slate-500'}`}>
                         <span className="opacity-10 text-[9px] mt-0.5 tracking-tighter">[{new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}]</span>
                         <p className="flex-1 leading-relaxed tracking-tight group-hover/kernel:text-slate-300 transition-colors font-mono">{log.text}</p>
                       </div>
                     ))}
                     <div ref={logEndRef} />
                   </div>
-
-                  <div className="mt-12 pt-12 border-t border-white/5 space-y-12 relative z-10">
-                    <div className="space-y-6">
-                      <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.3em]">
-                        <span className="text-slate-600">Cognitive Load</span>
-                        <span className="text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]">OPTIMAL</span>
-                      </div>
-                      <div className="h-2.5 w-full bg-slate-900 rounded-full overflow-hidden p-[2px]">
-                        <div className="h-full bg-indigo-500 rounded-full shadow-[0_0_20px_rgba(99,102,241,1)] transition-all duration-1000" style={{ width: '92%' }}></div>
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => { setProjectIdea(''); setBlueprintUrl(null); }}
-                      className="w-full py-6 border border-rose-500/20 text-rose-500/40 rounded-[32px] text-[11px] font-black uppercase tracking-[0.4em] hover:bg-rose-500 hover:text-white transition-all duration-500 active:scale-95 shadow-lg"
-                    >
-                      TERMINATE SYSTEM
-                    </button>
-                  </div>
-
-                  {/* Terminal Corner HUD Decor */}
-                  <div className="absolute top-6 right-6 w-12 h-12 border-t-2 border-r-2 border-indigo-500/20 rounded-tr-3xl pointer-events-none"></div>
-                  <div className="absolute bottom-6 left-6 w-12 h-12 border-b-2 border-l-2 border-indigo-500/20 rounded-bl-3xl pointer-events-none"></div>
                 </div>
 
-                <div className="p-16 premium-gradient rounded-[72px] text-white shadow-4xl relative overflow-hidden group shadow-indigo-500/20">
-                  {/* Custom premium gradient background for this card */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-900 group-hover:scale-110 transition-transform duration-[3000ms]"></div>
-                  <div className="relative z-10 space-y-8">
-                    <div className="flex items-center space-x-6">
-                      <div className="w-16 h-16 bg-white/10 backdrop-blur-3xl rounded-[28px] flex items-center justify-center border border-white/20 shadow-2xl transition-transform group-hover:-rotate-12">
-                        <svg className="w-9 h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                      </div>
-                      <div className="space-y-1">
-                        <h5 className="text-2xl font-black tracking-tight uppercase">Architect Voice</h5>
-                        <p className="text-[10px] text-white/40 uppercase tracking-[0.4em] font-black">Advisory Protocol</p>
-                      </div>
+                <div className="mt-12 pt-12 border-t border-white/5 space-y-12 relative z-10">
+                  <div className="space-y-6">
+                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.3em]">
+                      <span className="text-slate-600">Cognitive Load</span>
+                      <span className="text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]">OPTIMAL</span>
                     </div>
-                    <p className="text-2xl text-white font-black leading-tight italic tracking-tight antialiased">
-                      <span className="text-white/30 text-4xl mr-1">"</span>
-                      Your vision suggests a decoupled microservices approach. Prioritize the core ingress validation before optimizing visual state.
-                      <span className="text-white/30 text-4xl ml-1">"</span>
-                    </p>
+                    <div className="h-2.5 w-full bg-slate-900 rounded-full overflow-hidden p-[2px]">
+                      <div className="h-full bg-indigo-500 rounded-full shadow-[0_0_20px_rgba(99,102,241,1)] transition-all duration-1000" style={{ width: '92%' }}></div>
+                    </div>
                   </div>
+                  <button
+                    onClick={() => { setProjectIdea(''); setBlueprintUrl(null); }}
+                    className="w-full py-6 border border-rose-500/20 text-rose-500/40 rounded-[32px] text-[11px] font-black uppercase tracking-[0.4em] hover:bg-rose-500 hover:text-white transition-all duration-500 active:scale-95 shadow-lg"
+                  >
+                    TERMINATE SYSTEM
+                  </button>
+                </div>
+
+                {/* Terminal Corner HUD Decor */}
+                <div className="absolute top-6 right-6 w-12 h-12 border-t-2 border-r-2 border-indigo-500/20 rounded-tr-3xl pointer-events-none"></div>
+                <div className="absolute bottom-6 left-6 w-12 h-12 border-b-2 border-l-2 border-indigo-500/20 rounded-bl-3xl pointer-events-none"></div>
+              </div>
+
+              <div className="p-16 premium-gradient rounded-[72px] text-white shadow-4xl relative overflow-hidden group shadow-indigo-500/20">
+                <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-900 group-hover:scale-110 transition-transform duration-[3000ms]"></div>
+                <div className="relative z-10 space-y-8">
+                  <div className="flex items-center space-x-6">
+                    <div className="w-16 h-16 bg-white/10 backdrop-blur-3xl rounded-[28px] flex items-center justify-center border border-white/20 shadow-2xl transition-transform group-hover:-rotate-12">
+                      <svg className="w-9 h-9" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                    </div>
+                    <div className="space-y-1">
+                      <h5 className="text-2xl font-black tracking-tight uppercase">Architect Voice</h5>
+                      <p className="text-[10px] text-white/40 uppercase tracking-[0.4em] font-black">Advisory Protocol</p>
+                    </div>
+                  </div>
+                  <p className="text-2xl text-white font-black leading-tight italic tracking-tight antialiased">
+                    <span className="text-white/30 text-4xl mr-1">"</span>
+                    Your vision suggests a decoupled microservices approach. Prioritize the core ingress validation before optimizing visual state.
+                    <span className="text-white/30 text-4xl ml-1">"</span>
+                  </p>
                 </div>
               </div>
             </div>
-        )}
           </div>
+        )}
+      </div>
     </div>
-      );
+  );
 };
 
-      export default ProjectConsole;
+export default ProjectConsole;
