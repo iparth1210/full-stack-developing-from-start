@@ -216,6 +216,13 @@ const App: React.FC = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-indigo-950/20 to-transparent pointer-events-none"></div>
         </div>
       )}
+      {/* Neural Interface SVG Filters */}
+      <svg className="hidden">
+        <filter id="neural-lens">
+          <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="3" result="noise" />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" />
+        </filter>
+      </svg>
     </div>
   );
 };
