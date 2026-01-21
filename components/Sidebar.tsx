@@ -20,7 +20,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, onLaunchAnti
   return (
     <div className="w-20 lg:w-72 bg-slate-950/40 backdrop-blur-3xl border-r border-white/5 flex flex-col h-screen sticky top-0 transition-all duration-500 overflow-hidden group">
       <div className="p-8 mb-8">
-        <div className="w-12 h-12 bg-indigo-500 rounded-2xl flex items-center justify-center shadow-2xl shadow-indigo-500/20 mb-6 group-hover:rotate-12 transition-transform duration-500">
+        <div className="w-12 h-12 bg-indigo-500 rounded-2xl flex items-center justify-center shadow-2xl shadow-indigo-500/20 mb-6 group-hover:rotate-12 transition-transform duration-500 animate-heartbeat">
           <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1H9L8 4z" /></svg>
         </div>
         <div className="space-y-1">
@@ -37,11 +37,11 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, onLaunchAnti
             key={item.id}
             onClick={() => setActiveTab(item.id)}
             className={`w-full flex items-center lg:space-x-4 px-5 py-4 rounded-2xl transition-all duration-300 relative group/btn ${activeTab === item.id
-                ? 'premium-glass text-white border-white/10 shadow-lg'
-                : 'text-slate-500 hover:text-slate-300 hover:bg-white/[0.03]'
+              ? 'premium-glass text-white border-white/10 shadow-lg'
+              : 'text-slate-500 hover:text-slate-300 hover:bg-white/[0.03]'
               }`}
           >
-            <div className={`transition-transform duration-300 ${activeTab === item.id ? 'scale-110 text-indigo-400' : 'group-hover/btn:scale-110'}`}>
+            <div className={`transition-all duration-300 ${activeTab === item.id ? 'scale-110 text-indigo-400' : 'group-hover/btn:scale-110 glitch-hover'}`}>
               <svg className="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={item.icon} />
               </svg>
