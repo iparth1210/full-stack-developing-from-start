@@ -29,6 +29,11 @@ const App: React.FC = () => {
     return saved ? JSON.parse(saved) : INITIAL_ROADMAP;
   });
   const [xp, setXp] = useState(() => Number(localStorage.getItem('odyssey_xp')) || 45200);
+  const [projectNotes, setProjectNotes] = useState<string>(() => localStorage.getItem('odyssey_project_notes') || '');
+  const [systemLogs, setSystemLogs] = useState<{ id: string; text: string; type: 'info' | 'warn' | 'success'; timestamp: string }[]>(() => {
+    const saved = localStorage.getItem('odyssey_system_logs');
+    return saved ? JSON.parse(saved) : [{ id: 'init', text: 'SYSTEM_INITIALIZED: ARCHITECT_LINK_ESTABLISHED', type: 'success', timestamp: new Date().toLocaleTimeString() }];
+  });
 
   const [showXpAlert, setShowXpAlert] = useState(false);
   const [isAntigravity, setIsAntigravity] = useState(false);
@@ -63,13 +68,25 @@ const App: React.FC = () => {
     localStorage.setItem('odyssey_roadmap', JSON.stringify(roadmap));
     localStorage.setItem('odyssey_xp', xp.toString());
     localStorage.setItem('odyssey_neural_intensity', neuralIntensity.toString());
-  }, [projectIdea, projectTasks, roadmap, xp, neuralIntensity]);
+    localStorage.setItem('odyssey_project_notes', projectNotes);
+    localStorage.setItem('odyssey_system_logs', JSON.stringify(systemLogs.slice(-50)));
+  }, [projectIdea, projectTasks, roadmap, xp, neuralIntensity, projectNotes, systemLogs]);
+
+  const addSystemLog = (text: string, type: 'info' | 'warn' | 'success' = 'info') => {
+    setSystemLogs(prev => [...prev.slice(-49), {
+      id: `log-${Date.now()}-${Math.random()}`,
+      text,
+      type,
+      timestamp: new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })
+    }]);
+  };
 
   useEffect(() => {
     if (activeTab !== lastTab) {
       const click = new Audio('data:audio/mp3;base64,SUQzBAAAAAABAFRYWFgAAAASAAADbWFqb3JfYnJhbmQAZGFzaABUWFhYAAAAEgAAA21pbm9yX3ZlcnNpb24AMABUWFhYAAAAHAAAA2NvbXBhdGlibGVfYnJhbmRzAGlzbzZtcDQxAFRTU0UAAAAPAAADTGF2ZjYwLjMuMTAwAAAAAAAAAAAAAAD/+00AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYXBpbmcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+00fAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYXBpbmcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+00fAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYXBpbmcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
       click.volume = 0.05;
       click.play().catch(() => { });
+      addSystemLog(`INTERFACE_SHIFT: NAVIGATED_TO_${activeTab.toUpperCase()}`, 'info');
       setLastTab(activeTab);
     }
   }, [activeTab, lastTab]);
@@ -152,7 +169,16 @@ const App: React.FC = () => {
           }}
         />;
       case 'project':
-        return <ProjectConsole projectIdea={projectIdea} setProjectIdea={setProjectIdea} tasks={projectTasks} setTasks={setProjectTasks} />;
+        return <ProjectConsole
+          projectIdea={projectIdea}
+          setProjectIdea={setProjectIdea}
+          tasks={projectTasks}
+          setTasks={setProjectTasks}
+          notes={projectNotes}
+          setNotes={setProjectNotes}
+          logs={systemLogs}
+          addLog={addSystemLog}
+        />;
       case 'mentor':
         return <MentorChat context={`Active Module: ${roadmap.find(m => m.status === 'CURRENT')?.title || 'None'}. Project: ${projectIdea}`} />;
       case 'stats':

@@ -8,17 +8,22 @@ interface ProjectConsoleProps {
   setProjectIdea: (idea: string) => void;
   tasks: ProjectTask[];
   setTasks: (tasks: ProjectTask[]) => void;
+  notes: string;
+  setNotes: (notes: string) => void;
+  logs: { id: string; text: string; type: 'info' | 'warn' | 'success'; timestamp: string }[];
+  addLog: (text: string, type: 'info' | 'warn' | 'success') => void;
 }
 
 type BlueprintStyle = 'blueprint' | 'neon' | 'minimalist' | 'cyberpunk';
 
-const ProjectConsole: React.FC<ProjectConsoleProps> = ({ projectIdea, setProjectIdea, tasks, setTasks }) => {
+const ProjectConsole: React.FC<ProjectConsoleProps> = ({
+  projectIdea, setProjectIdea, tasks, setTasks, notes, setNotes, logs, addLog
+}) => {
   const [loading, setLoading] = useState(false);
   const [regenerating, setRegenerating] = useState(false);
   const [newIdea, setNewIdea] = useState(projectIdea);
   const [blueprintUrl, setBlueprintUrl] = useState<string | null>(null);
   const [selectedStyle, setSelectedStyle] = useState<BlueprintStyle>('blueprint');
-  const [logs, setLogs] = useState<{ id: string | number; text: string; type: 'info' | 'warn' | 'success' }[]>([]);
   const logEndRef = useRef<HTMLDivElement>(null);
 
   const styles: { id: BlueprintStyle; label: string }[] = [
@@ -67,8 +72,22 @@ const ProjectConsole: React.FC<ProjectConsoleProps> = ({ projectIdea, setProject
     }
   };
 
-  const addLog = (text: string, type: 'info' | 'warn' | 'success') => {
-    setLogs(prev => [...prev.slice(-40), { id: Math.random().toString(), text, type }]);
+  const handleExport = () => {
+    const data = {
+      project: projectIdea,
+      blueprintStyle: selectedStyle,
+      tasks,
+      notes,
+      logs,
+      exportedAt: new Date().toISOString()
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `odyssey-archive-${Date.now()}.json`;
+    a.click();
+    addLog("SECURE_EXPORT: ARCHIVE_DATA_SYNCED_TO_EXTERNAL_STORAGE", "success");
   };
 
   useEffect(() => {
@@ -217,6 +236,41 @@ const ProjectConsole: React.FC<ProjectConsoleProps> = ({ projectIdea, setProject
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-20 flex-1 pb-40">
             <div className="lg:col-span-8 space-y-20">
+              {/* Achievement/Stats Bar */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="premium-glass p-12 rounded-[60px] border-white/10 space-y-6 relative overflow-hidden group">
+                  <div className="absolute inset-0 bg-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
+                  <div className="flex items-center justify-between relative z-10">
+                    <h4 className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.4em]">Neural Archive</h4>
+                    <button
+                      onClick={handleExport}
+                      className="p-3 bg-indigo-500/10 rounded-xl border border-indigo-500/20 text-indigo-400 hover:bg-indigo-500 hover:text-white transition-all active:scale-95"
+                      title="Secure Export"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                    </button>
+                  </div>
+                  <textarea
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    className="w-full bg-slate-900/40 rounded-[40px] p-8 text-white text-lg font-medium outline-none border border-white/5 focus:border-indigo-500/30 transition-all resize-none h-48 placeholder:text-slate-700"
+                    placeholder="Commence architectural field notes..."
+                  />
+                </div>
+
+                <div className="premium-glass p-12 rounded-[60px] border-white/10 flex flex-col justify-center space-y-6">
+                  <div className="text-center space-y-2">
+                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Masterpiece Integrity</span>
+                    <div className="text-5xl font-black text-white italic tracking-tighter">
+                      {Math.round((tasks.filter(t => t.completed).length / (tasks.length || 1)) * 100)}%
+                    </div>
+                  </div>
+                  <div className="h-2 w-full bg-slate-900 rounded-full overflow-hidden p-[1px]">
+                    <div className="h-full bg-gradient-to-r from-indigo-500 to-cyan-400 rounded-full transition-all duration-1000" style={{ width: `${(tasks.filter(t => t.completed).length / (tasks.length || 1)) * 100}%` }}></div>
+                  </div>
+                </div>
+              </div>
+
               <div className="premium-glass border-white/10 rounded-[72px] p-16 lg:p-24 space-y-16 shadow-4xl relative overflow-hidden group">
                 <div className="absolute inset-0 bg-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
                 <div className="flex items-center justify-between relative z-10">
@@ -334,7 +388,7 @@ const ProjectConsole: React.FC<ProjectConsoleProps> = ({ projectIdea, setProject
                   <div className="terminal-scroll space-y-5">
                     {logs.map((log) => (
                       <div key={log.id} className={`flex space-x-5 animate-in slide-in-from-bottom-2 fade-in duration-300 ${log.type === 'success' ? 'text-emerald-400 text-glow-emerald' : log.type === 'warn' ? 'text-rose-400 text-glow-rose' : 'text-slate-500'}`}>
-                        <span className="opacity-10 text-[9px] mt-0.5 tracking-tighter">[{new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}]</span>
+                        <span className="opacity-10 text-[9px] mt-0.5 tracking-tighter">[{log.timestamp}]</span>
                         <p className="flex-1 leading-relaxed tracking-tight group-hover/kernel:text-slate-300 transition-colors font-mono">{log.text}</p>
                       </div>
                     ))}
