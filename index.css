@@ -27,18 +27,68 @@
 
 @layer base {
   body {
-    @apply bg-[#020617] text-slate-100 antialiased selection:bg-indigo-500/30 font-['Outfit'];
+    @apply bg-[#020617] text-slate-100 antialiased selection:bg-indigo-500/30 font-['Outfit'] relative;
     overflow-x: hidden;
+  }
+
+  body::before {
+    content: "";
+    @apply fixed inset-0 pointer-events-none z-[1000] opacity-[0.03];
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background-size: 100% 2px, 3px 100%;
+  }
+
+  body::after {
+    content: "";
+    @apply fixed inset-0 pointer-events-none z-[999] opacity-[0.4] mix-blend-overlay;
+    background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+    animation: noise-move 0.2s infinite;
+  }
+}
+
+@keyframes noise-move {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  10% {
+    transform: translate(-1%, -1%);
+  }
+
+  20% {
+    transform: translate(-2%, 1%);
+  }
+
+  33% {
+    transform: translate(1%, -2%);
+  }
+
+  45% {
+    transform: translate(-1%, 2%);
+  }
+
+  60% {
+    transform: translate(3%, 1%);
+  }
+
+  80% {
+    transform: translate(-2%, -3%);
+  }
+
+  100% {
+    transform: translate(1%, 2%);
   }
 }
 
 @layer components {
   .premium-glass {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
-    border: 1px solid var(--glass-border);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+      0 10px 40px -10px rgba(0, 0, 0, 0.5);
   }
 
   .premium-gradient-text {

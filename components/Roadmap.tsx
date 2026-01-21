@@ -129,24 +129,26 @@ const Roadmap: React.FC<RoadmapProps> = ({ modules, setRoadmap, onComplete }) =>
                   key={mod.id}
                   disabled={isLocked}
                   onClick={() => { setSelectedModuleId(mod.id); setSelectedDayNumber(1); }}
-                  className={`w-full group p-5 rounded-3xl text-left border transition-all duration-500 relative overflow-hidden ${isSelected
-                    ? 'premium-glass border-indigo-500/40 shadow-[0_10px_30px_rgba(99,102,241,0.2)]'
+                  className={`w-full group p-5 rounded-2xl text-left border transition-all duration-500 relative overflow-hidden ${isSelected
+                    ? 'bg-indigo-500/10 border-indigo-500/40 shadow-[0_10px_30px_rgba(99,102,241,0.2)] scale-[1.02]'
                     : isLocked
                       ? 'border-transparent opacity-30 grayscale cursor-not-allowed'
                       : 'border-transparent hover:bg-white/[0.03] hover:border-white/10'
                     }`}
                 >
                   <div className="flex items-center justify-between mb-2 relative z-10">
-                    <span className={`text-[9px] font-black uppercase tracking-widest ${isSelected ? 'text-indigo-400' : 'text-slate-500'}`}>Month {mod.month.toString().padStart(2, '0')}</span>
-                    {isSelected && <div className="w-2 h-2 bg-indigo-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(129,140,248,1)]"></div>}
+                    <span className={`text-[9px] font-black uppercase tracking-widest ${isSelected ? 'text-indigo-400' : 'text-slate-500'}`}>STREAM_{mod.month.toString().padStart(2, '0')}</span>
+                    {isSelected && <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-ping"></div>}
                   </div>
-                  <h5 className={`text-xs font-black uppercase tracking-tight truncate relative z-10 ${isSelected ? 'text-white' : 'text-slate-400'}`}>{mod.title}</h5>
-                  <div className="mt-3 h-1 w-full bg-white/5 rounded-full overflow-hidden relative z-10 border border-white/5">
+                  <h5 className={`text-[11px] font-black uppercase tracking-tight truncate relative z-10 ${isSelected ? 'text-white' : 'text-slate-400'}`}>{mod.title}</h5>
+                  <div className="mt-3 h-1 w-full bg-slate-900 rounded-full overflow-hidden relative z-10 p-[1px]">
                     <div
-                      className={`h-full bg-gradient-to-r from-indigo-500 to-cyan-400 transition-all duration-1000 ${isSelected ? 'opacity-100' : 'opacity-40'}`}
+                      className={`h-full bg-gradient-to-r from-indigo-500 to-cyan-400 transition-all duration-1000 rounded-full shadow-[0_0_8px_rgba(99,102,241,0.5)] ${isSelected ? 'opacity-100' : 'opacity-40'}`}
                       style={{ width: `${progress}%` }}
                     ></div>
                   </div>
+                  {/* Cartridge Edge Decor */}
+                  <div className="absolute top-0 right-0 w-8 h-8 bg-indigo-500/5 rotate-45 translate-x-4 -translate-y-4 border-l border-b border-indigo-500/20"></div>
                 </button>
               );
             })}
@@ -186,13 +188,13 @@ const Roadmap: React.FC<RoadmapProps> = ({ modules, setRoadmap, onComplete }) =>
       </div>
 
       {/* Content Engine */}
-      <div className="flex-1 flex overflow-hidden bg-[#020617]/40">
+      <div className="flex-1 flex overflow-hidden bg-[#020617]/60">
         <div
           ref={contentContainerRef}
-          className="flex-1 overflow-y-auto px-10 lg:px-20 py-16 scrollbar-hide relative"
+          className="flex-1 overflow-y-auto px-10 lg:px-24 py-20 scrollbar-hide relative"
         >
           {activeDay && (
-            <div key={`${selectedModuleId}-${selectedDayNumber}`} className="max-w-4xl mx-auto space-y-24 animate-in fade-in slide-in-from-bottom-12 duration-1000 ease-out">
+            <div key={`${selectedModuleId}-${selectedDayNumber}`} className="max-w-4xl mx-auto space-y-32 animate-in fade-in slide-in-from-bottom-12 duration-1000 ease-out">
               <header className="space-y-10 relative">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3 premium-glass pl-2 pr-4 py-1.5 rounded-full border-white/10 shadow-xl">
