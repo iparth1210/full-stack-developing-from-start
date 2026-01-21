@@ -67,8 +67,12 @@ const MentorChat: React.FC<MentorChatProps> = ({ context }) => {
   };
 
   return (
-    <div className="h-full flex flex-col overflow-hidden py-8">
-      <div className="managed-container flex-1 flex flex-col min-h-0">
+    <div className="h-full flex flex-col overflow-hidden py-8 relative">
+      {/* Neural Frequency Pulse */}
+      <div className="absolute inset-0 pointer-events-none opacity-20 overflow-hidden">
+        <div className="absolute top-1/2 left-0 w-full h-[1px] bg-indigo-500/30 animate-pulse shadow-[0_0_20px_indigo]"></div>
+      </div>
+      <div className="managed-container flex-1 flex flex-col min-h-0 relative z-10">
         <header className="mb-12 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 border-b border-white/5 pb-10">
           <div className="flex items-center space-x-8">
             <div className="w-20 h-20 rounded-[32px] bg-white flex items-center justify-center text-slate-950 shadow-4xl transform -rotate-3 hover:rotate-0 transition-all duration-500">
