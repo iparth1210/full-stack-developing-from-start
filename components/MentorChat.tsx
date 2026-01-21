@@ -80,6 +80,10 @@ const MentorChat: React.FC<MentorChatProps> = ({ context }) => {
                 <span>Neural Advisory Active</span>
               </div>
               <h2 className="text-3xl lg:text-4xl font-black text-white tracking-tighter antialiased glitch-text" data-text="Master Architect.">Master Architect<span className="premium-gradient-text">.</span></h2>
+              <div className="flex items-center space-x-4">
+                <span className="text-[8px] font-mono text-indigo-400/40 uppercase tracking-[0.4em]">Neural_Link: [STABLE]</span>
+                <span className="text-[8px] font-mono text-white/10 uppercase tracking-[0.4em]">S_VER: 4.2.0</span>
+              </div>
             </div>
           </div>
 

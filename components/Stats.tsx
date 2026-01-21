@@ -62,7 +62,10 @@ const Stats: React.FC<StatsProps> = ({ xp, tasks, roadmap }) => {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Skill Matrix (Radar) */}
-          <div className="lg:col-span-5 bg-slate-950 border border-white/5 p-12 rounded-[70px] shadow-4xl relative overflow-hidden flex flex-col items-center">
+          <div className="lg:col-span-5 bg-slate-950/60 border border-white/10 p-12 rounded-[70px] shadow-4xl relative overflow-hidden flex flex-col items-center group">
+            {/* Radar HUD Decor */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.05),transparent)] animate-pulse"></div>
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent animate-scan z-20"></div>
             <header className="w-full mb-12">
               <h3 className="text-2xl font-black text-white">Full-Stack DNA</h3>
               <p className="text-sm text-slate-500 font-bold uppercase tracking-widest">Skill Distribution Matrix</p>
