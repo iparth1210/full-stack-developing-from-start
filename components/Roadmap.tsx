@@ -136,13 +136,13 @@ const Roadmap: React.FC<RoadmapProps> = ({
       )}
 
       {/* Navigation Panels */}
-      <div className="w-[300px] 2xl:w-80 premium-glass border-r border-white/5 flex flex-col p-6 lg:p-10 space-y-10 scrollbar-hide shrink-0">
-        <div className="space-y-6">
+      <div className="w-[320px] 2xl:w-[360px] premium-glass border-r border-white/5 flex flex-col p-8 lg:p-12 space-y-12 scrollbar-hide shrink-0 overflow-y-auto">
+        <div className="space-y-8">
           <div className="flex items-center justify-between px-2">
             <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Knowledge Streams</h4>
             <span className="text-[9px] font-bold text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-full uppercase tracking-widest border border-indigo-500/20">Active</span>
           </div>
-          <div className="space-y-3 overflow-y-auto max-h-[400px] scrollbar-hide pr-2">
+          <div className="space-y-4 overflow-y-auto max-h-[350px] scrollbar-hide pr-2">
             {modules.map(mod => {
               const isSelected = selectedModuleId === mod.id;
               const progress = getModuleProgress(mod.id);
@@ -154,19 +154,24 @@ const Roadmap: React.FC<RoadmapProps> = ({
                   disabled={isLocked}
                   onMouseMove={handleMouseMove}
                   onClick={() => { setSelectedModuleId(mod.id); setSelectedDayNumber(1); }}
-                  className={`w-full group p-5 rounded-2xl text-left border transition-all duration-500 relative overflow-hidden gaze-tilt ${isSelected
+                  className={`w-full group p-6 rounded-3xl text-left border transition-all duration-500 relative overflow-hidden gaze-tilt ${isSelected
                     ? 'bg-indigo-500/10 border-indigo-500/40 shadow-[0_10px_30px_rgba(99,102,241,0.2)] scale-[1.02]'
                     : isLocked
                       ? 'border-transparent opacity-30 grayscale cursor-not-allowed'
                       : 'border-transparent hover:bg-white/[0.03] hover:border-white/10'
                     }`}
                 >
-                  <div className="flex items-center justify-between mb-2 relative z-10">
+                  <div className="flex items-center justify-between mb-3 relative z-10">
                     <span className={`text-[9px] font-black uppercase tracking-widest ${isSelected ? 'text-indigo-400' : 'text-slate-500'}`}>STREAM_{mod.month.toString().padStart(2, '0')}</span>
                     {isSelected && <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-ping"></div>}
                   </div>
-                  <h5 className={`text-[11px] font-black uppercase tracking-tight truncate relative z-10 ${isSelected ? 'text-white' : 'text-slate-400'}`}>{mod.title}</h5>
-                  <div className="mt-3 h-1 w-full bg-slate-900 rounded-full overflow-hidden relative z-10 p-[1px]">
+                  <div className="flex items-center gap-2 relative z-10">
+                    <h5 className={`text-[13px] font-black uppercase tracking-tight truncate flex-1 ${isSelected ? 'text-white' : 'text-slate-400'}`}>{mod.title}</h5>
+                    {mod.title.length > 22 && (
+                      <span className="text-slate-600 text-xs font-black shrink-0">•••</span>
+                    )}
+                  </div>
+                  <div className="mt-4 h-1.5 w-full bg-slate-900 rounded-full overflow-hidden relative z-10 p-[1px]">
                     <div
                       className={`h-full bg-gradient-to-r from-indigo-500 to-cyan-400 transition-all duration-1000 rounded-full shadow-[0_0_8px_rgba(99,102,241,0.5)] ${isSelected ? 'opacity-100' : 'opacity-40'}`}
                       style={{ width: `${progress}%` }}
@@ -180,12 +185,12 @@ const Roadmap: React.FC<RoadmapProps> = ({
           </div>
         </div>
 
-        <div className="pt-8 border-t border-white/10 space-y-6">
+        <div className="pt-10 border-t border-white/10 space-y-8">
           <div className="flex items-center justify-between px-2">
             <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Synapse Nodes</h4>
-            <span className="text-[9px] font-mono text-indigo-400/60 font-black">{completedDays[selectedModuleId || '']?.length || 0}/{activeModule.dailySchedule?.length || 0}</span>
+            <span className="text-[10px] font-mono text-indigo-400/60 font-black">{completedDays[selectedModuleId || '']?.length || 0}/{activeModule.dailySchedule?.length || 0}</span>
           </div>
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-4 gap-4">
             {activeModule.dailySchedule?.map(day => {
               const isSelected = selectedDayNumber === day.day;
               const isCompleted = completedDays[selectedModuleId || '']?.includes(day.day);
@@ -217,7 +222,7 @@ const Roadmap: React.FC<RoadmapProps> = ({
       <div className="flex-1 flex overflow-hidden bg-[#020617]/60">
         <div
           ref={contentContainerRef}
-          className="flex-1 overflow-y-auto px-10 lg:px-24 py-20 scrollbar-hide relative"
+          className="flex-1 overflow-y-auto px-8 lg:px-16 py-16 scrollbar-hide relative"
         >
           {activeDay && (
             <div key={`${selectedModuleId}-${selectedDayNumber}`} className="max-w-4xl mx-auto space-y-32 animate-in fade-in slide-in-from-bottom-12 duration-1000 ease-out">
@@ -240,10 +245,10 @@ const Roadmap: React.FC<RoadmapProps> = ({
                     <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white">Audio Intelligence</span>
                   </button>
                 </div>
-                <h1 className="text-[clamp(2.5rem,7vw,5rem)] font-black text-white leading-[1.1] tracking-tight antialiased">
+                <h1 className="text-[clamp(2rem,5vw,3.5rem)] font-black text-white leading-[1.15] tracking-tight antialiased">
                   {activeDay.title}
                 </h1>
-                <p className="text-xl lg:text-2xl text-slate-400 font-medium leading-relaxed italic border-l-[4px] border-indigo-500/30 pl-8 max-w-3xl opacity-80 decoration-indigo-500/20 underline-offset-8 decoration-2">
+                <p className="text-lg lg:text-xl text-slate-400 font-medium leading-relaxed italic border-l-[3px] border-indigo-500/30 pl-6 max-w-2xl opacity-80">
                   "{activeDay.objective}"
                 </p>
               </header>
@@ -476,36 +481,41 @@ const Roadmap: React.FC<RoadmapProps> = ({
         </div>
 
         {/* Intelligence Lab Sidebar */}
-        <div className="w-[320px] 2xl:w-[400px] premium-glass border-l border-white/5 p-8 lg:p-10 overflow-y-auto scrollbar-hide hidden xl:block shrink-0 shadow-[-20px_0_60px_rgba(0,0,0,0.5)] z-10">
-          <div className="space-y-16">
+        <div className="w-[300px] 2xl:w-[360px] premium-glass border-l border-white/5 p-6 lg:p-8 overflow-y-auto scrollbar-hide hidden xl:block shrink-0 shadow-[-20px_0_60px_rgba(0,0,0,0.5)] z-10">
+          <div className="space-y-10">
             <header className="flex items-center justify-between">
-              <h4 className="text-[11px] font-black text-slate-500 uppercase tracking-[0.5em]">Strategic Assets</h4>
+              <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em]">Strategic Assets</h4>
               <div className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(99,102,241,1)]"></div>
             </header>
 
-            <div className="space-y-8">
+            <div className="space-y-6">
               {activeDay?.resources.map((res, i) => (
                 <div key={i} className="group relative">
                   <button onClick={() => handleResourceClick(res)}
-                    className="w-full group p-8 rounded-[50px] premium-glass border-white/5 hover:border-indigo-500/50 hover:bg-white/[0.05] transition-all duration-700 text-left shadow-2xl relative overflow-hidden active:scale-95">
+                    className="w-full group p-5 rounded-[32px] premium-glass border-white/5 hover:border-indigo-500/50 hover:bg-white/[0.05] transition-all duration-500 text-left shadow-lg relative overflow-hidden active:scale-95">
                     {res.thumbnail && (
-                      <div className="relative aspect-video rounded-[36px] overflow-hidden mb-8 shadow-3xl bg-black border border-white/5">
+                      <div className="relative aspect-video rounded-2xl overflow-hidden mb-5 shadow-xl bg-black border border-white/5">
                         <img src={res.thumbnail} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2000ms] opacity-60 group-hover:opacity-100" />
                         <div className="absolute inset-0 bg-transparent flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                          <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-slate-950 shadow-[0_0_40px_rgba(255,255,255,0.5)] scale-90 group-hover:scale-100 transition-transform duration-500">
-                            <svg className="w-8 h-8 ml-1" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.333-5.89a1.5 1.5 0 000-2.538L6.3 2.841z" /></svg>
+                          <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-slate-950 shadow-[0_0_30px_rgba(255,255,255,0.5)] scale-90 group-hover:scale-100 transition-transform duration-500">
+                            <svg className="w-6 h-6 ml-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.333-5.89a1.5 1.5 0 000-2.538L6.3 2.841z" /></svg>
                           </div>
                         </div>
                       </div>
                     )}
-                    <div className="flex items-center justify-between mb-4 px-3">
-                      <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">{res.type} <span className="text-slate-700 mx-2">/</span> {res.difficulty}</span>
-                      <div className="flex items-center space-x-2">
+                    <div className="flex items-center justify-between mb-3 px-1">
+                      <span className="text-[9px] font-black text-indigo-400 uppercase tracking-widest">{res.type} <span className="text-slate-700 mx-1">/</span> {res.difficulty}</span>
+                      <div className="flex items-center space-x-1.5">
                         <svg className="w-3 h-3 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                        <span className="text-[11px] font-mono text-slate-500 font-bold">{res.duration || '--'}</span>
+                        <span className="text-[10px] font-mono text-slate-500 font-bold">{res.duration || '--'}</span>
                       </div>
                     </div>
-                    <h5 className="text-2xl font-black text-white px-3 group-hover:text-indigo-400 transition-colors leading-[1.2] tracking-tighter line-clamp-2">{res.label}</h5>
+                    <div className="flex items-center gap-1 px-1">
+                      <h5 className="text-lg font-black text-white group-hover:text-indigo-400 transition-colors leading-tight tracking-tight truncate flex-1">{res.label}</h5>
+                      {res.label.length > 20 && (
+                        <span className="text-slate-600 text-xs font-black shrink-0">•••</span>
+                      )}
+                    </div>
                   </button>
                 </div>
               ))}
