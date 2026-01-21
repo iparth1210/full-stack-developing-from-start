@@ -190,3 +190,66 @@
 ::-webkit-scrollbar-thumb {
   @apply bg-white/10 rounded-full hover:bg-white/20 transition-colors;
 }
+
+@keyframes kenburns {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(1.15);
+  }
+}
+
+.animate-kenburns {
+  animation: kenburns 20s ease-in-out infinite alternate;
+}
+
+@keyframes shake-extreme {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-8px);
+  }
+
+  50% {
+    transform: translateX(8px);
+  }
+
+  75% {
+    transform: translateX(-8px);
+  }
+}
+
+.animate-shake-extreme {
+  animation: shake-extreme 0.4s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+/* Typography Fluidity & Managed Layout */
+h1 {
+  @apply tracking-tighter leading-[1.05];
+}
+
+.glass-panel {
+  @apply premium-glass rounded-[40px] border-white/10 shadow-2xl;
+}
+
+.managed-container {
+  @apply max-w-7xl mx-auto px-6 lg:px-12 w-full;
+}
+
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+  }
+
+  50% {
+    box-shadow: 0 0 50px rgba(99, 102, 241, 0.8);
+  }
+}
