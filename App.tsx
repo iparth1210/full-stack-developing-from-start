@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Sidebar from './components/Sidebar';
 import Roadmap from './components/Roadmap';
 import ProjectConsole from './components/ProjectConsole';
@@ -12,6 +12,9 @@ import { ProjectTask } from './types';
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'roadmap' | 'project' | 'mentor' | 'stats'>('roadmap');
   const [lastTab, setLastTab] = useState(activeTab);
+
+  const [onboarding, setOnboarding] = useState(() => !localStorage.getItem('odyssey_initialized'));
+  const [onboardingStage, setOnboardingStage] = useState(0);
 
   // Singularity Pass: Ambient Audio Ref
   const ambientRef = useRef<HTMLAudioElement | null>(null);
@@ -26,24 +29,6 @@ const App: React.FC = () => {
       ambientRef.current.play().catch(() => { });
     }
   }, [onboarding]);
-
-  // Persistence Layer
-  const [projectIdea, setProjectIdea] = useState<string>(() => localStorage.getItem('odyssey_project_idea') || '');
-  const [projectTasks, setProjectTasks] = useState<ProjectTask[]>(() => {
-    const saved = localStorage.getItem('odyssey_project_tasks');
-    return saved ? JSON.parse(saved) : [];
-  });
-  const [roadmap, setRoadmap] = useState(() => {
-    const saved = localStorage.getItem('odyssey_roadmap');
-    return saved ? JSON.parse(saved) : INITIAL_ROADMAP;
-  });
-  const [xp, setXp] = useState(() => Number(localStorage.getItem('odyssey_xp')) || 45200);
-
-  const [showXpAlert, setShowXpAlert] = useState(false);
-  const [isAntigravity, setIsAntigravity] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [onboarding, setOnboarding] = useState(() => !localStorage.getItem('odyssey_initialized'));
-  const [onboardingStage, setOnboardingStage] = useState(0);
 
   // Sync state to LocalStorage
   useEffect(() => {
@@ -125,12 +110,12 @@ const App: React.FC = () => {
       {/* Adaptive Nebula Background */}
       <div className="fixed inset-0 pointer-events-none -z-10">
         <div className={`absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full blur-[200px] animate-nebula transition-colors duration-[2000ms] ${activeTab === 'roadmap' ? 'bg-indigo-600/20' :
-            activeTab === 'project' ? 'bg-cyan-600/20' :
-              activeTab === 'mentor' ? 'bg-purple-600/20' : 'bg-emerald-600/20'
+          activeTab === 'project' ? 'bg-cyan-600/20' :
+            activeTab === 'mentor' ? 'bg-purple-600/20' : 'bg-emerald-600/20'
           }`}></div>
         <div className={`absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full blur-[250px] animate-nebula [animation-delay:4s] transition-colors duration-[2000ms] ${activeTab === 'roadmap' ? 'bg-purple-600/20' :
-            activeTab === 'project' ? 'bg-indigo-600/20' :
-              activeTab === 'mentor' ? 'bg-emerald-600/20' : 'bg-cyan-600/20'
+          activeTab === 'project' ? 'bg-indigo-600/20' :
+            activeTab === 'mentor' ? 'bg-emerald-600/20' : 'bg-cyan-600/20'
           }`}></div>
 
         {/* Subtle Grid Pattern */}
