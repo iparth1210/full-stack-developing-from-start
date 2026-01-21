@@ -373,3 +373,18 @@ h1 {
     box-shadow: 0 0 50px rgba(99, 102, 241, 0.8);
   }
 }
+
+/* Architect's Gaze Tilt Effect */
+.gaze-tilt {
+  transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.gaze-tilt:hover {
+  transform: translateZ(20px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+}
+
+.gaze-tilt>* {
+  transform: translateZ(10px);
+}
