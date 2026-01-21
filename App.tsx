@@ -46,6 +46,7 @@ const App: React.FC = () => {
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const [isSurge, setIsSurge] = useState(false);
   const [parallax, setParallax] = useState({ x: 0, y: 0 });
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => localStorage.getItem('odyssey_sidebar_collapsed') === 'true');
 
   // Navigation Deep-Linking
   const [selectedModuleId, setSelectedModuleId] = useState<string | null>(() => localStorage.getItem('odyssey_selected_module') || null);
@@ -78,7 +79,8 @@ const App: React.FC = () => {
     localStorage.setItem('odyssey_completed_days', JSON.stringify(completedDays));
     if (selectedModuleId) localStorage.setItem('odyssey_selected_module', selectedModuleId);
     localStorage.setItem('odyssey_selected_day', selectedDayNumber.toString());
-  }, [projectIdea, projectTasks, roadmap, xp, neuralIntensity, projectNotes, systemLogs, completedDays, activeTab, selectedModuleId, selectedDayNumber]);
+    localStorage.setItem('odyssey_sidebar_collapsed', sidebarCollapsed.toString());
+  }, [projectIdea, projectTasks, roadmap, xp, neuralIntensity, projectNotes, systemLogs, completedDays, activeTab, selectedModuleId, selectedDayNumber, sidebarCollapsed]);
 
   const addSystemLog = (text: string, type: 'info' | 'warn' | 'success' = 'info') => {
     setSystemLogs(prev => [...prev.slice(-49), {
@@ -251,7 +253,17 @@ const App: React.FC = () => {
         )
       }
 
-      <div className={`fixed inset-y-0 left-0 z-[100] transform ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:static lg:block transition-transform duration-500 ease-in-out`}>
+      {/* Floating Sidebar Toggle Button */}
+      <button
+        onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+        className={`fixed top-1/2 -translate-y-1/2 z-[101] w-10 h-20 bg-slate-900/90 backdrop-blur-xl border border-white/10 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 transition-all duration-300 shadow-2xl ${sidebarCollapsed ? 'left-0 rounded-r-2xl' : 'left-[288px] lg:left-[288px] rounded-r-2xl'}`}
+      >
+        <svg className={`w-5 h-5 transition-transform ${sidebarCollapsed ? 'rotate-0' : 'rotate-180'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+
+      <div className={`fixed inset-y-0 left-0 z-[100] transform ${sidebarCollapsed ? '-translate-x-full' : 'translate-x-0'} ${mobileMenuOpen ? 'translate-x-0' : ''} lg:static transition-transform duration-500 ease-in-out`}>
         <Sidebar
           activeTab={activeTab}
           setActiveTab={(tab) => { setActiveTab(tab); setMobileMenuOpen(false); }}
