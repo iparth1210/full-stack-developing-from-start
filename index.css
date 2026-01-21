@@ -40,22 +40,11 @@
   body::before {
     content: "";
     @apply fixed inset-0 pointer-events-none z-[1000] opacity-[0.03];
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-    background-size: 100% 2px, 3px 100%;
-  }
-
-  body::after {
-    content: "";
-    @apply fixed inset-0 pointer-events-none z-[999] opacity-[0.4] mix-blend-overlay;
-    background-image: url('https://grainy-gradients.vercel.app/noise.svg');
-    animation: noise-move 0.2s infinite;
-  }
-
-  /* Cinematic Vignette Overlay */
-  body::before {
-    content: "";
-    @apply fixed inset-0 pointer-events-none z-[1001];
-    background: radial-gradient(circle at center, transparent 30%, rgba(2, 6, 23, 0.4) 100%);
+    background:
+      linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+      linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)),
+      radial-gradient(circle at center, transparent 30%, rgba(2, 6, 23, 0.8) 100%);
+    background-size: 100% 2px, 3px 100%, 100% 100%;
   }
 
   /* Custom Selection Theme */
@@ -130,6 +119,30 @@
 
   .premium-button:hover::after {
     @apply opacity-100;
+  }
+
+  .overdrive-lever {
+    @apply relative flex items-center justify-center overflow-hidden transition-all duration-500;
+    box-shadow:
+      0 0 0 2px rgba(99, 102, 241, 0.2),
+      0 15px 45px rgba(0, 0, 0, 0.4),
+      inset 0 0 20px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(to bottom, #1e293b, #0f172a);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .overdrive-lever::before {
+    content: '';
+    @apply absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-0 transition-opacity duration-300;
+  }
+
+  .overdrive-lever:hover::before {
+    @apply opacity-100 animate-pulse;
+  }
+
+  .overdrive-lever:active {
+    transform: translateY(4px) scale(0.98);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
   }
 }
 

@@ -464,10 +464,10 @@ const Roadmap: React.FC<RoadmapProps> = ({
                       }, 1500);
                     }}
                     disabled={completing}
-                    className="premium-button text-white px-20 py-8 rounded-[40px] text-lg font-black uppercase tracking-[0.4em] shadow-4xl group/final active:scale-95 transition-all overflow-hidden relative"
+                    className="overdrive-lever text-white px-24 py-8 rounded-[40px] text-lg font-black uppercase tracking-[0.4em] group active:scale-95 shadow-4xl"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 opacity-0 group-hover/final:opacity-100 transition-opacity duration-500"></div>
-                    <span className="relative z-10">{completing ? 'TRANSMITTING...' : 'FINALIZE_LAYER'}</span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <span className="relative z-10">{completing ? 'TRANSMITTING...' : 'FINALIZE_OVERDRIVE'}</span>
                   </button>
                 </div>
               </div>
