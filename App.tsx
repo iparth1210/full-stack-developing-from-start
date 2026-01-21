@@ -30,6 +30,7 @@ const App: React.FC = () => {
   const [xp, setXp] = useState(() => Number(localStorage.getItem('odyssey_xp')) || 45200);
 
   const [showXpAlert, setShowXpAlert] = useState(false);
+  const [isAntigravity, setIsAntigravity] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [neuralIntensity, setNeuralIntensity] = useState(() => Number(localStorage.getItem('odyssey_neural_intensity')) || 50);
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
@@ -126,7 +127,10 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#020617] text-slate-100 overflow-hidden relative font-['Outfit']">
+    <div
+      className={`flex min-h-screen bg-[#020617] text-slate-100 overflow-hidden relative font-['Outfit'] transition-all duration-300`}
+      style={{ filter: isSurge ? 'url(#pulse-displacement) url(#neural-lens)' : 'url(#neural-lens)' }}
+    >
       {/* Adaptive Nebula Background */}
       <div className="fixed inset-0 pointer-events-none -z-10">
         <div className={`absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full blur-[200px] animate-nebula transition-colors duration-[2000ms] ${activeTab === 'roadmap' ? 'bg-indigo-600/20' :
