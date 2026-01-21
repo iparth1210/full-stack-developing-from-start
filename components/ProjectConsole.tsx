@@ -105,7 +105,7 @@ const ProjectConsole: React.FC<ProjectConsoleProps> = ({
       ];
       bootLogs.forEach((msg, i) => {
         setTimeout(() => {
-          setLogs(prev => [...prev, { id: `boot-${Date.now()}-${i}`, text: msg, type: 'info' }]);
+          addLog(msg, 'info');
         }, i * 250);
       });
     }
