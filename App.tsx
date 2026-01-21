@@ -31,6 +31,7 @@ const App: React.FC = () => {
   const [showXpAlert, setShowXpAlert] = useState(false);
   const [isAntigravity, setIsAntigravity] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [neuralIntensity, setNeuralIntensity] = useState(() => Number(localStorage.getItem('odyssey_neural_intensity')) || 50);
 
   // Singularity Pass: Ambient Audio Ref
   const ambientRef = useRef<HTMLAudioElement | null>(null);
@@ -52,7 +53,8 @@ const App: React.FC = () => {
     localStorage.setItem('odyssey_project_tasks', JSON.stringify(projectTasks));
     localStorage.setItem('odyssey_roadmap', JSON.stringify(roadmap));
     localStorage.setItem('odyssey_xp', xp.toString());
-  }, [projectIdea, projectTasks, roadmap, xp]);
+    localStorage.setItem('odyssey_neural_intensity', neuralIntensity.toString());
+  }, [projectIdea, projectTasks, roadmap, xp, neuralIntensity]);
 
   useEffect(() => {
     if (activeTab !== lastTab) {
@@ -250,7 +252,7 @@ const App: React.FC = () => {
       <svg className="hidden">
         <filter id="neural-lens">
           <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="3" result="noise" />
-          <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale={neuralIntensity / 10} />
         </filter>
       </svg>
     </div>

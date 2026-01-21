@@ -7,9 +7,11 @@ interface SidebarProps {
   activeTab: NavItem;
   setActiveTab: (tab: NavItem) => void;
   onLaunchAntigravity: () => void;
+  intensity: number;
+  setIntensity: (value: number) => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, onLaunchAntigravity }) => {
+const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, onLaunchAntigravity, intensity, setIntensity }) => {
   const items: { id: NavItem; label: string; icon: string }[] = [
     { id: 'roadmap', label: 'Roadmap', icon: 'M13 10V3L4 14h7v7l9-11h-7z' },
     { id: 'project', label: 'Masterpiece', icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10' },
@@ -62,6 +64,26 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, onLaunchAnti
           <svg className="w-4 h-4 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
           <span>Antigravity App</span>
         </button>
+
+        <div className="hidden lg:block premium-glass rounded-2xl p-6 overflow-hidden relative group/intensity">
+          <div className="relative z-10 space-y-4">
+            <div className="flex justify-between items-center">
+              <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Neural Link</span>
+              <span className="text-[10px] font-black text-white/40 uppercase">{intensity}%</span>
+            </div>
+            <div className="relative h-6 flex items-center">
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={intensity}
+                onChange={(e) => setIntensity(Number(e.target.value))}
+                className="w-full h-1 bg-slate-800 rounded-full appearance-none cursor-pointer accent-indigo-500"
+              />
+            </div>
+            <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest opacity-60">Optic Distortion Level</p>
+          </div>
+        </div>
 
         <div className="hidden lg:block premium-glass rounded-2xl p-5 overflow-hidden relative cursor-help group/rank">
           <div className="relative z-10">
