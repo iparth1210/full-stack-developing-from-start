@@ -195,32 +195,69 @@ const Roadmap: React.FC<RoadmapProps> = ({
           </div>
         </div>
 
-        {/* Single Line Day Selector */}
+        {/* Compact Day Selector with 3-Dot Dropdown */}
         <div className="p-4 border-b border-white/5">
-          <div className="flex items-center gap-2 mb-3">
-            <h4 className="text-[9px] font-black text-slate-500 uppercase tracking-[0.3em]">Day</h4>
-            <span className="text-[9px] font-mono text-indigo-400/60">{completedDays[selectedModuleId || '']?.length || 0}/{activeModule.dailySchedule?.length || 0}</span>
+          <div className="flex items-center justify-between">
+            <div className="flex-1">
+              <span className="text-[8px] font-black text-slate-600 uppercase tracking-[0.4em] block mb-1">Active Day</span>
+              <div className="flex items-center gap-2">
+                <span className="text-lg font-black text-white">{selectedDayNumber}</span>
+                <span className="text-[9px] font-mono text-indigo-400/60">of {activeModule.dailySchedule?.length || 0}</span>
+              </div>
+            </div>
+            <div className="relative">
+              <button
+                onClick={() => {
+                  const dropdown = document.getElementById('day-dropdown');
+                  dropdown?.classList.toggle('hidden');
+                }}
+                className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-all active:scale-95"
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="4" r="2" /><circle cx="10" cy="10" r="2" /><circle cx="10" cy="16" r="2" /></svg>
+              </button>
+
+              {/* Vertical Day Dropdown */}
+              <div id="day-dropdown" className="hidden absolute top-full right-0 mt-2 w-48 premium-glass border border-white/10 rounded-2xl shadow-2xl z-50 p-2 max-h-72 overflow-y-auto scrollbar-hide animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="grid grid-cols-4 gap-1">
+                  {activeModule.dailySchedule?.map(day => {
+                    const isSelected = selectedDayNumber === day.day;
+                    const isCompleted = completedDays[selectedModuleId || '']?.includes(day.day);
+                    return (
+                      <button
+                        key={day.day}
+                        onClick={() => {
+                          setSelectedDayNumber(day.day);
+                          setQuizAnswer(null);
+                          setShowExplanation(false);
+                          setActiveMode('theory');
+                          document.getElementById('day-dropdown')?.classList.add('hidden');
+                        }}
+                        className={`w-full aspect-square rounded-lg flex items-center justify-center text-[11px] font-black transition-all relative ${isSelected
+                          ? 'bg-indigo-500 text-white'
+                          : isCompleted
+                            ? 'bg-emerald-500/20 text-emerald-400'
+                            : 'bg-white/5 text-slate-500 hover:bg-white/10 hover:text-white'
+                          }`}
+                      >
+                        {day.day}
+                        {isCompleted && !isSelected && <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-emerald-400 rounded-full"></div>}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
-            {activeModule.dailySchedule?.map(day => {
-              const isSelected = selectedDayNumber === day.day;
-              const isCompleted = completedDays[selectedModuleId || '']?.includes(day.day);
-              return (
-                <button
-                  key={day.day}
-                  onClick={() => { setSelectedDayNumber(day.day); setQuizAnswer(null); setShowExplanation(false); setActiveMode('theory'); }}
-                  className={`shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-[11px] font-black transition-all relative ${isSelected
-                    ? 'bg-indigo-500 text-white shadow-lg'
-                    : isCompleted
-                      ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
-                      : 'bg-white/5 text-slate-500 hover:bg-white/10 hover:text-white'
-                    }`}
-                >
-                  {day.day}
-                  {isCompleted && !isSelected && <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-emerald-400 rounded-full"></div>}
-                </button>
-              );
-            })}
+
+          {/* Compact Progress Indicator */}
+          <div className="mt-3 flex items-center gap-3">
+            <div className="flex-1 h-1 bg-slate-900 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-gradient-to-r from-emerald-500 to-cyan-400 rounded-full"
+                style={{ width: `${(completedDays[selectedModuleId || '']?.length || 0) / (activeModule.dailySchedule?.length || 1) * 100}%` }}
+              ></div>
+            </div>
+            <span className="text-[9px] font-mono text-emerald-400">{completedDays[selectedModuleId || '']?.length || 0}/{activeModule.dailySchedule?.length || 0}</span>
           </div>
         </div>
 
