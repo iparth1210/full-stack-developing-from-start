@@ -11,13 +11,50 @@ import { ProjectTask } from './types';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'roadmap' | 'project' | 'mentor' | 'stats'>('roadmap');
-  const [projectIdea, setProjectIdea] = useState<string>('');
-  const [projectTasks, setProjectTasks] = useState<ProjectTask[]>([]);
-  const [roadmap, setRoadmap] = useState(INITIAL_ROADMAP);
-  const [xp, setXp] = useState(45200);
+
+  // Persistence Layer
+  const [projectIdea, setProjectIdea] = useState<string>(() => localStorage.getItem('odyssey_project_idea') || '');
+  const [projectTasks, setProjectTasks] = useState<ProjectTask[]>(() => {
+    const saved = localStorage.getItem('odyssey_project_tasks');
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [roadmap, setRoadmap] = useState(() => {
+    const saved = localStorage.getItem('odyssey_roadmap');
+    return saved ? JSON.parse(saved) : INITIAL_ROADMAP;
+  });
+  const [xp, setXp] = useState(() => Number(localStorage.getItem('odyssey_xp')) || 45200);
+
   const [showXpAlert, setShowXpAlert] = useState(false);
   const [isAntigravity, setIsAntigravity] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [onboarding, setOnboarding] = useState(() => !localStorage.getItem('odyssey_initialized'));
+  const [onboardingStage, setOnboardingStage] = useState(0);
+
+  // Sync state to LocalStorage
+  useEffect(() => {
+    localStorage.setItem('odyssey_project_idea', projectIdea);
+    localStorage.setItem('odyssey_project_tasks', JSON.stringify(projectTasks));
+    localStorage.setItem('odyssey_roadmap', JSON.stringify(roadmap));
+    localStorage.setItem('odyssey_xp', xp.toString());
+  }, [projectIdea, projectTasks, roadmap, xp]);
+
+  useEffect(() => {
+    if (onboarding) {
+      const stages = [
+        { delay: 1000, stage: 1 }, // Handshake
+        { delay: 2500, stage: 2 }, // Authenticating
+        { delay: 4000, stage: 3 }, // Success
+        { delay: 5500, stage: 4 }, // Close
+      ];
+      stages.forEach(({ delay, stage }) => {
+        setTimeout(() => setOnboardingStage(stage), delay);
+      });
+      setTimeout(() => {
+        setOnboarding(false);
+        localStorage.setItem('odyssey_initialized', 'true');
+      }, 6000);
+    }
+  }, [onboarding]);
 
   const addXp = (amount: number) => {
     setXp(prev => prev + amount);
@@ -28,7 +65,10 @@ const App: React.FC = () => {
   const renderContent = () => {
     switch (activeTab) {
       case 'roadmap':
-        return <Roadmap modules={roadmap} onComplete={addXp} />;
+        return <Roadmap modules={roadmap} setRoadmap={setRoadmap} onComplete={(amount) => {
+          addXp(amount);
+          // logic to mark current day as completed in roadmap state could go here if needed
+        }} />;
       case 'project':
         return <ProjectConsole projectIdea={projectIdea} setProjectIdea={setProjectIdea} tasks={projectTasks} setTasks={setProjectTasks} />;
       case 'mentor':
@@ -130,6 +170,36 @@ const App: React.FC = () => {
           {renderContent()}
         </div>
       </main>
+
+      {/* Neural Handshake Splash Screen */}
+      {onboarding && (
+        <div className="fixed inset-0 z-[200] bg-slate-950 flex flex-col items-center justify-center p-12 overflow-hidden">
+          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
+          <div className="relative z-10 space-y-12 text-center max-w-4xl">
+            <div className={`w-32 h-32 bg-indigo-500 rounded-[40px] flex items-center justify-center text-white shadow-[0_0_80px_rgba(99,102,241,0.6)] mx-auto transition-all duration-1000 ${onboardingStage >= 1 ? 'scale-100 rotate-0' : 'scale-0 rotate-180'}`}>
+              <svg className="w-16 h-16 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+            </div>
+
+            <div className="space-y-6">
+              <h2 className="text-5xl lg:text-7xl font-black text-white tracking-tighter uppercase italic overflow-hidden">
+                <span className={`block transition-all duration-700 ${onboardingStage >= 1 ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}>NEURAL_HANDSHAKE</span>
+              </h2>
+              <div className="flex flex-col items-center space-y-4">
+                <div className={`h-1 bg-indigo-500/20 rounded-full w-64 lg:w-96 transition-all duration-[3000ms] ease-out ${onboardingStage >= 1 ? 'opacity-100' : 'opacity-0'}`}>
+                  <div className="h-full bg-indigo-500 rounded-full transition-all duration-[5000ms]" style={{ width: onboardingStage === 1 ? '30%' : onboardingStage === 2 ? '70%' : onboardingStage >= 3 ? '100%' : '0%' }}></div>
+                </div>
+                <div className="font-mono text-[10px] text-indigo-400/60 uppercase tracking-[0.4em] font-black h-4 overflow-hidden">
+                  <span className={`block transition-all duration-300 ${onboardingStage === 1 ? 'translate-y-0' : '-translate-y-full'}`}>Establishing secure uplink...</span>
+                  <span className={`block transition-all duration-300 ${onboardingStage === 2 ? 'translate-y-0' : '-translate-y-full'}`}>Synchronizing cognitive layers...</span>
+                  <span className={`block transition-all duration-300 ${onboardingStage === 3 ? 'translate-y-0' : '-translate-y-full'}`}>Connection stabilized. Welcome, Architect.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="absolute inset-0 bg-gradient-to-t from-indigo-950/20 to-transparent pointer-events-none"></div>
+        </div>
+      )}
     </div>
   );
 };

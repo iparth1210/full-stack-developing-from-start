@@ -5,11 +5,12 @@ import { getVoiceBriefing } from '../services/geminiService';
 
 interface RoadmapProps {
   modules: RoadmapModule[];
+  setRoadmap: (roadmap: RoadmapModule[]) => void;
   onComplete?: (xp: number) => void;
 }
 
-const Roadmap: React.FC<RoadmapProps> = ({ modules, onComplete }) => {
-  const [selectedModuleId, setSelectedModuleId] = useState<string | null>(modules[0]?.id || null);
+const Roadmap: React.FC<RoadmapProps> = ({ modules, setRoadmap, onComplete }) => {
+  const [selectedModuleId, setSelectedModuleId] = useState<string | null>(modules[1]?.id || modules[0]?.id || null);
   const [selectedDayNumber, setSelectedDayNumber] = useState<number>(1);
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
   const [activeMode, setActiveMode] = useState<'theory' | 'story' | 'usage' | 'quiz'>('theory');
@@ -17,6 +18,7 @@ const Roadmap: React.FC<RoadmapProps> = ({ modules, onComplete }) => {
   const [showExplanation, setShowExplanation] = useState(false);
   const [isAudioLoading, setIsAudioLoading] = useState(false);
   const [shakeQuiz, setShakeQuiz] = useState(false);
+  const [completing, setCompleting] = useState(false);
 
   const contentContainerRef = useRef<HTMLDivElement>(null);
 
@@ -434,6 +436,23 @@ const Roadmap: React.FC<RoadmapProps> = ({ modules, onComplete }) => {
                     )}
                   </div>
                 )}
+
+                <div className="pt-20 flex justify-center">
+                  <button
+                    onClick={() => {
+                      setCompleting(true);
+                      setTimeout(() => {
+                        if (onComplete) onComplete(500);
+                        setCompleting(false);
+                      }, 1500);
+                    }}
+                    disabled={completing}
+                    className="premium-button text-white px-20 py-8 rounded-[40px] text-lg font-black uppercase tracking-[0.4em] shadow-4xl group/final active:scale-95 transition-all overflow-hidden relative"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 opacity-0 group-hover/final:opacity-100 transition-opacity duration-500"></div>
+                    <span className="relative z-10">{completing ? 'TRANSMITTING...' : 'FINALIZE_LAYER'}</span>
+                  </button>
+                </div>
               </div>
             </div>
           )}
