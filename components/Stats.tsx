@@ -32,6 +32,11 @@ const Stats: React.FC<StatsProps> = ({ xp, tasks, roadmap }) => {
     { subject: 'Ops', A: 30, fullMark: 100 },
   ];
 
+  const pulseData = Array.from({ length: 20 }, (_, i) => ({
+    name: i,
+    value: 50 + Math.sin(i * 0.5) * 20 + Math.random() * 10
+  }));
+
   return (
     <div className="h-full overflow-y-auto scrollbar-hide py-16">
       <div className="managed-container space-y-20 pb-40">
@@ -121,23 +126,44 @@ const Stats: React.FC<StatsProps> = ({ xp, tasks, roadmap }) => {
           </div>
         </div>
 
-        {/* Activity Logs */}
-        <div className="bg-slate-950 border border-white/5 p-16 rounded-[80px] shadow-3xl">
-          <h3 className="text-3xl font-black text-white mb-12 tracking-tight">Recent Deployments</h3>
-          <div className="grid grid-cols-1 gap-4">
-            {[
-              { date: '2h ago', text: 'Verified Mastery: The Transistor Physical Layer', badge: 'Study' },
-              { date: '1d ago', text: 'Pushed master-branch update: "Logic Gate Lab V2"', badge: 'Project' },
-              { date: '3d ago', text: 'Achieved Scholar Rank: +5,000 Milestone Bonus', badge: 'Milestone' },
-            ].map((m, i) => (
-              <div key={i} className="flex items-center justify-between p-8 bg-white/[0.01] border border-white/5 rounded-[40px] group transition-all hover:bg-white/[0.03] hover:border-indigo-500/20">
-                <div className="flex items-center space-x-10">
-                  <span className="text-[12px] font-mono text-slate-600 font-bold uppercase tracking-widest w-24">{m.date}</span>
-                  <span className="text-xl text-slate-200 font-black group-hover:text-indigo-400 transition-colors">{m.text}</span>
+        {/* Neural Frequency & Activity Logs */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          {/* Real-time Frequency Pulse */}
+          <div className="lg:col-span-4 bg-slate-950/60 border border-white/10 p-10 rounded-[60px] shadow-4xl relative overflow-hidden flex flex-col group">
+            <header className="mb-8">
+              <h3 className="text-xl font-black text-white uppercase tracking-tighter">Neural Frequency</h3>
+              <p className="text-[9px] font-bold text-indigo-400 uppercase tracking-widest">Real-time Diagnostic</p>
+            </header>
+            <div className="h-40 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={pulseData}>
+                  <Area type="monotone" dataKey="value" stroke="#6366f1" strokeWidth={2} fill="#6366f1" fillOpacity={0.1} />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="mt-8 flex justify-between items-center text-[10px] font-black uppercase text-white/20 tracking-widest px-2">
+              <span>SYNC_STABLE</span>
+              <span className="animate-pulse text-indigo-500">62.8 HZ</span>
+            </div>
+          </div>
+
+          <div className="lg:col-span-8 bg-slate-950 border border-white/5 p-12 rounded-[60px] shadow-3xl">
+            <h3 className="text-xl font-black text-white mb-8 tracking-tight uppercase">Recent Deployments</h3>
+            <div className="space-y-3">
+              {[
+                { date: '2h ago', text: 'Verified Mastery: The Transistor Physical Layer', badge: 'Study' },
+                { date: '1d ago', text: 'Pushed master-branch update: "Logic Gate Lab V2"', badge: 'Project' },
+                { date: '3d ago', text: 'Achieved Scholar Rank: +5,000 Milestone Bonus', badge: 'Milestone' },
+              ].map((m, i) => (
+                <div key={i} className="flex items-center justify-between p-6 bg-white/[0.01] border border-white/5 rounded-[30px] group transition-all hover:bg-white/[0.03] hover:border-indigo-500/20">
+                  <div className="flex items-center space-x-8">
+                    <span className="text-[10px] font-mono text-slate-600 font-bold uppercase tracking-widest w-16">{m.date}</span>
+                    <span className="text-lg text-slate-200 font-black group-hover:text-indigo-400 transition-colors uppercase truncate max-w-md">{m.text}</span>
+                  </div>
+                  <span className="text-[9px] font-black uppercase tracking-[0.3em] px-4 py-1.5 rounded-xl bg-slate-900 text-slate-500 border border-white/10 group-hover:text-white transition-colors">{m.badge}</span>
                 </div>
-                <span className="text-[11px] font-black uppercase tracking-[0.3em] px-6 py-2 rounded-2xl bg-slate-900 text-slate-500 border border-white/10 group-hover:text-white transition-colors">{m.badge}</span>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>
