@@ -1,0 +1,110 @@
+
+import React, { useState, useEffect, useRef } from 'react';
+
+interface CommandPaletteProps {
+    isOpen: boolean;
+    onClose: () => void;
+    onSelectAction: (actionId: string) => void;
+}
+
+const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose, onSelectAction }) => {
+    const [query, setQuery] = useState('');
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    const actions = [
+        { id: 'roadmap', label: 'Access Roadmap', category: 'Navigation', shortcut: 'R' },
+        { id: 'project', label: 'Initialize Masterpiece', category: 'Project', shortcut: 'P' },
+        { id: 'mentor', label: 'Consult Neural Mentor', category: 'AI', shortcut: 'M' },
+        { id: 'stats', label: 'View Growth Diagnostics', category: 'Stats', shortcut: 'G' },
+        { id: 'antigravity', label: 'Execute Antigravity Portal', category: 'System', shortcut: 'A' },
+    ];
+
+    const filtered = actions.filter(a =>
+        a.label.toLowerCase().includes(query.toLowerCase()) ||
+        a.category.toLowerCase().includes(query.toLowerCase())
+    );
+
+    useEffect(() => {
+        if (isOpen) {
+            setQuery('');
+            setTimeout(() => inputRef.current?.focus(), 100);
+        }
+    }, [isOpen]);
+
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 z-[1000] flex items-start justify-center pt-[15vh] px-6">
+            <div
+                className="absolute inset-0 bg-slate-950/80 backdrop-blur-xl animate-in fade-in duration-300"
+                onClick={onClose}
+            />
+
+            <div className="relative w-full max-w-2xl premium-glass rounded-[40px] border-white/20 shadow-[0_0_100px_rgba(0,0,0,0.8)] overflow-hidden animate-in slide-in-from-top-10 zoom-in-95 duration-500">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-indigo-500 to-transparent animate-scan z-20"></div>
+
+                <div className="p-8 border-b border-white/5 bg-white/[0.02]">
+                    <div className="flex items-center space-x-6">
+                        <svg className="w-8 h-8 text-indigo-400 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                        <input
+                            ref={inputRef}
+                            type="text"
+                            placeholder="Execute Neural Command..."
+                            value={query}
+                            onChange={(e) => setQuery(e.target.value)}
+                            className="w-full bg-transparent text-3xl font-black text-white placeholder-white/10 outline-none tracking-tight"
+                        />
+                        <div className="px-4 py-2 bg-white/5 rounded-xl border border-white/10 text-[10px] font-black text-white/40 uppercase tracking-widest whitespace-nowrap">
+                            ESC TO CLOSE
+                        </div>
+                    </div>
+                </div>
+
+                <div className="max-h-[50vh] overflow-y-auto p-4 space-y-2">
+                    {filtered.length > 0 ? (
+                        filtered.map((action) => (
+                            <button
+                                key={action.id}
+                                onClick={() => { onSelectAction(action.id); onClose(); }}
+                                className="w-full group flex items-center justify-between p-6 rounded-[28px] hover:bg-white/[0.05] transition-all duration-300 text-left"
+                            >
+                                <div className="flex items-center space-x-6">
+                                    <div className="w-12 h-12 bg-indigo-500/10 rounded-2xl flex items-center justify-center border border-indigo-500/20 group-hover:scale-110 group-hover:rotate-12 transition-all duration-500">
+                                        <span className="text-xl font-black text-indigo-400">{action.shortcut}</span>
+                                    </div>
+                                    <div>
+                                        <h4 className="text-lg font-black text-white tracking-tight group-hover:text-indigo-400 transition-colors uppercase">{action.label}</h4>
+                                        <span className="text-[10px] font-bold text-white/20 uppercase tracking-[0.3em]">{action.category}</span>
+                                    </div>
+                                </div>
+                                <div className="opacity-0 group-hover:opacity-100 transition-opacity translate-x-4 group-hover:translate-x-0 duration-300">
+                                    <svg className="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                                </div>
+                            </button>
+                        ))
+                    ) : (
+                        <div className="p-12 text-center text-white/20">
+                            <span className="text-[10px] font-black uppercase tracking-[1em]">NO COMMANDS DETECTED</span>
+                        </div>
+                    )}
+                </div>
+
+                <div className="p-6 bg-slate-950/40 border-t border-white/5 flex justify-between items-center px-10">
+                    <div className="flex items-center space-x-12">
+                        <div className="flex items-center space-x-3 text-[9px] font-black text-white/20 uppercase tracking-widest">
+                            <span className="px-2 py-1 bg-white/5 rounded border border-white/10">↑↓</span>
+                            <span>NAVIGATE</span>
+                        </div>
+                        <div className="flex items-center space-x-3 text-[9px] font-black text-white/20 uppercase tracking-widest">
+                            <span className="px-2 py-1 bg-white/5 rounded border border-white/10">ENTER</span>
+                            <span>EXECUTE</span>
+                        </div>
+                    </div>
+                    <span className="text-[9px] font-black text-indigo-400/40 uppercase tracking-widest">ODYSSEY.OS // ARCHITECT_MODE</span>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default CommandPalette;

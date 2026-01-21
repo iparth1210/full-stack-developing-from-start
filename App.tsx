@@ -6,6 +6,7 @@ import ProjectConsole from './components/ProjectConsole';
 import MentorChat from './components/MentorChat';
 import Stats from './components/Stats';
 import AntigravityPortal from './components/AntigravityPortal';
+import CommandPalette from './components/CommandPalette';
 import { INITIAL_ROADMAP } from './constants';
 import { ProjectTask } from './types';
 
@@ -29,9 +30,10 @@ const App: React.FC = () => {
   const [xp, setXp] = useState(() => Number(localStorage.getItem('odyssey_xp')) || 45200);
 
   const [showXpAlert, setShowXpAlert] = useState(false);
-  const [isAntigravity, setIsAntigravity] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [neuralIntensity, setNeuralIntensity] = useState(() => Number(localStorage.getItem('odyssey_neural_intensity')) || 50);
+  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
+  const [isSurge, setIsSurge] = useState(false);
 
   // Singularity Pass: Ambient Audio Ref
   const ambientRef = useRef<HTMLAudioElement | null>(null);
@@ -256,7 +258,20 @@ const App: React.FC = () => {
           <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="3" result="noise" />
           <feDisplacementMap in="SourceGraphic" in2="noise" scale={neuralIntensity / 10} />
         </filter>
+        <filter id="pulse-displacement">
+          <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="1" result="noise" />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale={isSurge ? "15" : "0"} />
+        </filter>
       </svg>
+
+      <CommandPalette
+        isOpen={commandPaletteOpen}
+        onClose={() => setCommandPaletteOpen(false)}
+        onSelectAction={(id) => {
+          if (id === 'antigravity') setIsAntigravity(true);
+          else setActiveTab(id as any);
+        }}
+      />
     </div>
   );
 };
