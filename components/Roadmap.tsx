@@ -424,9 +424,17 @@ const Roadmap: React.FC<RoadmapProps> = ({ modules, setRoadmap, onComplete }) =>
                   <button
                     onClick={() => {
                       setCompleting(true);
+                      document.body.classList.add('animate-stabilization');
+
+                      // Intensity Audio
+                      const overdrive = new Audio('data:audio/mp3;base64,SUQzBAAAAAABAFRYWFgAAAASAAADbWFqb3JfYnJhbmQAZGFzaABUWFhYAAAAEgAAA21pbm9yX3ZlcnNpb24AMABUWFhYAAAAHAAAA2NvbXBhdGlibGVfYnJhbmRzAGlzbzZtcDQxAFRTU0UAAAAPAAADTGF2ZjYwLjMuMTAwAAAAAAAAAAAAAAD/+00AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYXBpbmcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+00fAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYXBpbmcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+00fAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABYXBpbmcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+                      overdrive.volume = 0.4;
+                      overdrive.play().catch(e => console.log("Audio blocked"));
+
                       setTimeout(() => {
                         if (onComplete) onComplete(500);
                         setCompleting(false);
+                        document.body.classList.remove('animate-stabilization');
                       }, 1500);
                     }}
                     disabled={completing}
