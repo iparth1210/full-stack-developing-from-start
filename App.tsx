@@ -263,7 +263,7 @@ const App: React.FC = () => {
         </svg>
       </button>
 
-      <div className={`fixed inset-y-0 left-0 z-[100] transform ${sidebarCollapsed ? '-translate-x-full' : 'translate-x-0'} ${mobileMenuOpen ? 'translate-x-0' : ''} lg:static transition-transform duration-500 ease-in-out`}>
+      <div className={`fixed inset-y-0 left-0 z-[100] transform ${sidebarCollapsed ? '-translate-x-full' : 'translate-x-0'} ${mobileMenuOpen ? 'translate-x-0' : ''} transition-transform duration-500 ease-in-out`}>
         <Sidebar
           activeTab={activeTab}
           setActiveTab={(tab) => { setActiveTab(tab); setMobileMenuOpen(false); }}
@@ -282,7 +282,7 @@ const App: React.FC = () => {
         )
       }
 
-      <main className="flex-1 min-w-0 relative h-screen flex flex-col overflow-hidden">
+      <main className={`flex-1 min-w-0 relative h-screen flex flex-col overflow-hidden transition-all duration-500 ${sidebarCollapsed ? 'ml-0' : 'lg:ml-72'}`}>
         {/* Cinematic Mastery Notification */}
         {showXpAlert && (
           <div className="fixed top-12 left-1/2 -translate-x-1/2 z-[110] px-10 py-5 bg-indigo-600/30 backdrop-blur-3xl rounded-[32px] shadow-[0_20px_60px_rgba(79,70,229,0.4)] border border-white/20 animate-in fade-in slide-in-from-top-full duration-700 ease-out">
