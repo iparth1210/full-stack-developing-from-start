@@ -16,6 +16,22 @@ const App: React.FC = () => {
   const [onboarding, setOnboarding] = useState(() => !localStorage.getItem('odyssey_initialized'));
   const [onboardingStage, setOnboardingStage] = useState(0);
 
+  // Persistence Layer
+  const [projectIdea, setProjectIdea] = useState<string>(() => localStorage.getItem('odyssey_project_idea') || '');
+  const [projectTasks, setProjectTasks] = useState<ProjectTask[]>(() => {
+    const saved = localStorage.getItem('odyssey_project_tasks');
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [roadmap, setRoadmap] = useState(() => {
+    const saved = localStorage.getItem('odyssey_roadmap');
+    return saved ? JSON.parse(saved) : INITIAL_ROADMAP;
+  });
+  const [xp, setXp] = useState(() => Number(localStorage.getItem('odyssey_xp')) || 45200);
+
+  const [showXpAlert, setShowXpAlert] = useState(false);
+  const [isAntigravity, setIsAntigravity] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   // Singularity Pass: Ambient Audio Ref
   const ambientRef = useRef<HTMLAudioElement | null>(null);
 
