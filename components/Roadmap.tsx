@@ -135,85 +135,113 @@ const Roadmap: React.FC<RoadmapProps> = ({
         </div>
       )}
 
-      {/* Navigation Panels */}
-      <div className="w-[320px] 2xl:w-[360px] premium-glass border-r border-white/5 flex flex-col p-8 lg:p-12 space-y-12 scrollbar-hide shrink-0 overflow-y-auto">
-        <div className="space-y-8">
-          <div className="flex items-center justify-between px-2">
-            <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Knowledge Streams</h4>
-            <span className="text-[9px] font-bold text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-full uppercase tracking-widest border border-indigo-500/20">Active</span>
-          </div>
-          <div className="space-y-4 overflow-y-auto max-h-[350px] scrollbar-hide pr-2">
-            {modules.map(mod => {
-              const isSelected = selectedModuleId === mod.id;
-              const progress = getModuleProgress(mod.id);
-              const isLocked = mod.status === ModuleStatus.LOCKED;
+      {/* PRO Compact Navigation Bar */}
+      <div className="w-[280px] 2xl:w-[320px] premium-glass border-r border-white/5 flex flex-col shrink-0 overflow-hidden">
+        {/* Module Selector Header */}
+        <div className="p-6 border-b border-white/5 relative">
+          <div className="flex items-center justify-between">
+            <div className="flex-1">
+              <span className="text-[8px] font-black text-slate-600 uppercase tracking-[0.4em] block mb-1">Active Stream</span>
+              <h3 className="text-sm font-black text-white uppercase tracking-tight truncate pr-2">{activeModule.title}</h3>
+            </div>
+            <div className="relative">
+              <button
+                onClick={() => {
+                  const dropdown = document.getElementById('module-dropdown');
+                  dropdown?.classList.toggle('hidden');
+                }}
+                className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-all active:scale-95"
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="4" r="2" /><circle cx="10" cy="10" r="2" /><circle cx="10" cy="16" r="2" /></svg>
+              </button>
 
+              {/* Module Dropdown */}
+              <div id="module-dropdown" className="hidden absolute top-full right-0 mt-2 w-64 premium-glass border border-white/10 rounded-2xl shadow-2xl z-50 p-2 max-h-80 overflow-y-auto scrollbar-hide animate-in fade-in slide-in-from-top-2 duration-200">
+                {modules.map(mod => {
+                  const isSelected = selectedModuleId === mod.id;
+                  const isLocked = mod.status === ModuleStatus.LOCKED;
+                  return (
+                    <button
+                      key={mod.id}
+                      disabled={isLocked}
+                      onClick={() => {
+                        setSelectedModuleId(mod.id);
+                        setSelectedDayNumber(1);
+                        document.getElementById('module-dropdown')?.classList.add('hidden');
+                      }}
+                      className={`w-full p-3 rounded-xl text-left transition-all flex items-center gap-3 ${isSelected
+                        ? 'bg-indigo-500/20 text-white'
+                        : isLocked
+                          ? 'opacity-30 cursor-not-allowed text-slate-500'
+                          : 'text-slate-400 hover:bg-white/5 hover:text-white'
+                        }`}
+                    >
+                      <span className="text-[9px] font-mono text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded">{mod.month.toString().padStart(2, '0')}</span>
+                      <span className="text-xs font-bold truncate flex-1">{mod.title}</span>
+                      {isSelected && <div className="w-2 h-2 bg-indigo-400 rounded-full"></div>}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Progress Bar */}
+          <div className="mt-4 h-1 w-full bg-slate-900 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-indigo-500 to-cyan-400 rounded-full transition-all duration-1000"
+              style={{ width: `${getModuleProgress(selectedModuleId || '')}%` }}
+            ></div>
+          </div>
+        </div>
+
+        {/* Single Line Day Selector */}
+        <div className="p-4 border-b border-white/5">
+          <div className="flex items-center gap-2 mb-3">
+            <h4 className="text-[9px] font-black text-slate-500 uppercase tracking-[0.3em]">Day</h4>
+            <span className="text-[9px] font-mono text-indigo-400/60">{completedDays[selectedModuleId || '']?.length || 0}/{activeModule.dailySchedule?.length || 0}</span>
+          </div>
+          <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
+            {activeModule.dailySchedule?.map(day => {
+              const isSelected = selectedDayNumber === day.day;
+              const isCompleted = completedDays[selectedModuleId || '']?.includes(day.day);
               return (
                 <button
-                  key={mod.id}
-                  disabled={isLocked}
-                  onMouseMove={handleMouseMove}
-                  onClick={() => { setSelectedModuleId(mod.id); setSelectedDayNumber(1); }}
-                  className={`w-full group p-6 rounded-3xl text-left border transition-all duration-500 relative overflow-hidden gaze-tilt ${isSelected
-                    ? 'bg-indigo-500/10 border-indigo-500/40 shadow-[0_10px_30px_rgba(99,102,241,0.2)] scale-[1.02]'
-                    : isLocked
-                      ? 'border-transparent opacity-30 grayscale cursor-not-allowed'
-                      : 'border-transparent hover:bg-white/[0.03] hover:border-white/10'
+                  key={day.day}
+                  onClick={() => { setSelectedDayNumber(day.day); setQuizAnswer(null); setShowExplanation(false); setActiveMode('theory'); }}
+                  className={`shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-[11px] font-black transition-all relative ${isSelected
+                    ? 'bg-indigo-500 text-white shadow-lg'
+                    : isCompleted
+                      ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
+                      : 'bg-white/5 text-slate-500 hover:bg-white/10 hover:text-white'
                     }`}
                 >
-                  <div className="flex items-center justify-between mb-3 relative z-10">
-                    <span className={`text-[9px] font-black uppercase tracking-widest ${isSelected ? 'text-indigo-400' : 'text-slate-500'}`}>STREAM_{mod.month.toString().padStart(2, '0')}</span>
-                    {isSelected && <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-ping"></div>}
-                  </div>
-                  <div className="flex items-center gap-2 relative z-10">
-                    <h5 className={`text-[13px] font-black uppercase tracking-tight truncate flex-1 ${isSelected ? 'text-white' : 'text-slate-400'}`}>{mod.title}</h5>
-                    {mod.title.length > 22 && (
-                      <span className="text-slate-600 text-xs font-black shrink-0">•••</span>
-                    )}
-                  </div>
-                  <div className="mt-4 h-1.5 w-full bg-slate-900 rounded-full overflow-hidden relative z-10 p-[1px]">
-                    <div
-                      className={`h-full bg-gradient-to-r from-indigo-500 to-cyan-400 transition-all duration-1000 rounded-full shadow-[0_0_8px_rgba(99,102,241,0.5)] ${isSelected ? 'opacity-100' : 'opacity-40'}`}
-                      style={{ width: `${progress}%` }}
-                    ></div>
-                  </div>
-                  {/* Cartridge Edge Decor */}
-                  <div className="absolute top-0 right-0 w-8 h-8 bg-indigo-500/5 rotate-45 translate-x-4 -translate-y-4 border-l border-b border-indigo-500/20"></div>
+                  {day.day}
+                  {isCompleted && !isSelected && <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-emerald-400 rounded-full"></div>}
                 </button>
               );
             })}
           </div>
         </div>
 
-        <div className="pt-10 border-t border-white/10 space-y-8">
-          <div className="flex items-center justify-between px-2">
-            <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Synapse Nodes</h4>
-            <span className="text-[10px] font-mono text-indigo-400/60 font-black">{completedDays[selectedModuleId || '']?.length || 0}/{activeModule.dailySchedule?.length || 0}</span>
-          </div>
-          <div className="grid grid-cols-4 gap-4">
-            {activeModule.dailySchedule?.map(day => {
-              const isSelected = selectedDayNumber === day.day;
-              const isCompleted = completedDays[selectedModuleId || '']?.includes(day.day);
+        {/* Quick Info Panel */}
+        <div className="flex-1 p-4 overflow-y-auto scrollbar-hide">
+          <div className="space-y-4">
+            <div className="p-4 bg-white/[0.02] rounded-2xl border border-white/5">
+              <h5 className="text-[9px] font-black text-slate-600 uppercase tracking-[0.3em] mb-2">Current Focus</h5>
+              <p className="text-xs font-bold text-white leading-relaxed">{activeDay?.title || 'Select a day'}</p>
+            </div>
 
-              return (
-                <button
-                  key={day.day}
-                  onMouseMove={handleMouseMove}
-                  onClick={() => { setSelectedDayNumber(day.day); setQuizAnswer(null); setShowExplanation(false); setActiveMode('theory'); }}
-                  className={`relative aspect-square rounded-2xl flex items-center justify-center text-[11px] font-black transition-all duration-500 group gaze-tilt ${isSelected
-                    ? 'bg-indigo-500 text-white shadow-[0_10px_25px_rgba(99,102,241,0.5)] scale-110 z-10'
-                    : isCompleted
-                      ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20'
-                      : 'bg-white/5 text-slate-500 border border-white/5 hover:border-white/20 hover:text-slate-300'
-                    }`}
-                >
-                  <span className="relative z-10">{day.day}</span>
-                  {isCompleted && !isSelected && (
-                    <div className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-emerald-400 rounded-full shadow-[0_0_8px_rgba(52,211,153,1)]"></div>
-                  )}
-                </button>
-              );
-            })}
+            <div className="grid grid-cols-2 gap-2">
+              <div className="p-3 bg-white/[0.02] rounded-xl border border-white/5 text-center">
+                <span className="text-lg font-black text-indigo-400">{getModuleProgress(selectedModuleId || '')}%</span>
+                <span className="block text-[8px] font-black text-slate-600 uppercase tracking-widest">Progress</span>
+              </div>
+              <div className="p-3 bg-white/[0.02] rounded-xl border border-white/5 text-center">
+                <span className="text-lg font-black text-emerald-400">{activeModule.dailySchedule?.length || 0}</span>
+                <span className="block text-[8px] font-black text-slate-600 uppercase tracking-widest">Days</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
