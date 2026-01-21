@@ -67,7 +67,7 @@ const MentorChat: React.FC<MentorChatProps> = ({ context }) => {
   };
 
   return (
-    <div className="max-w-[1500px] mx-auto px-6 lg:px-16 py-10 flex flex-col h-[calc(100vh-80px)] font-['Outfit']">
+    <div className="max-w-[1200px] mx-auto px-6 lg:px-12 py-8 flex flex-col h-[calc(100vh-80px)] font-['Outfit']">
       <header className="mb-12 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 border-b border-white/5 pb-10">
         <div className="flex items-center space-x-8">
           <div className="w-20 h-20 rounded-[32px] bg-white flex items-center justify-center text-slate-950 shadow-4xl transform -rotate-3 hover:rotate-0 transition-all duration-500">
@@ -78,7 +78,7 @@ const MentorChat: React.FC<MentorChatProps> = ({ context }) => {
               <span className="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-pulse shadow-[0_0_12px_indigo]"></span>
               <span>Neural Advisory Active</span>
             </div>
-            <h2 className="text-4xl lg:text-5xl font-black text-white tracking-tighter antialiased">Master Architect<span className="premium-gradient-text">.</span></h2>
+            <h2 className="text-3xl lg:text-4xl font-black text-white tracking-tighter antialiased">Master Architect<span className="premium-gradient-text">.</span></h2>
           </div>
         </div>
 
@@ -151,15 +151,15 @@ const MentorChat: React.FC<MentorChatProps> = ({ context }) => {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             placeholder="Interrogate the system or seek architectural guidance..."
-            className="flex-1 bg-transparent border-none px-10 py-7 text-white text-2xl font-bold outline-none placeholder:text-slate-800"
+            className="flex-1 bg-transparent border-none px-6 lg:px-10 py-5 lg:py-7 text-lg lg:text-xl font-bold outline-none placeholder:text-slate-800"
           />
           <button
             onClick={handleSend}
             disabled={!input.trim() || isTyping}
-            className="premium-button text-white px-14 py-7 rounded-[36px] font-black uppercase tracking-[0.2em] disabled:opacity-30 active:scale-95 transition-all shadow-2xl flex items-center space-x-4 group/btn"
+            className="premium-button text-white px-8 lg:px-14 py-4 lg:py-7 rounded-[28px] lg:rounded-[36px] font-black uppercase tracking-[0.2em] disabled:opacity-30 active:scale-95 transition-all shadow-2xl flex items-center space-x-3 lg:space-x-4 group/btn"
           >
-            <span>DISPATCH</span>
-            <svg className="w-6 h-6 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+            <span className="text-[10px] lg:text-xs">DISPATCH</span>
+            <svg className="w-5 h-5 lg:w-6 h-6 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
           </button>
         </div>
         <div className="mt-6 flex justify-center space-x-12 opacity-20 group-focus-within:opacity-60 transition-opacity">

@@ -5,20 +5,23 @@
   --bg-main: 222 47% 11%;
   --bg-card: 222 47% 15%;
   --bg-sidebar: 222 47% 8%;
-  
+
   /* Accent Colors */
-  --accent-primary: 239 84% 67%; /* Electric Indigo */
-  --accent-secondary: 191 91% 50%; /* Cyber Cyan */
-  --accent-tertiary: 283 84% 67%; /* Nebula Purple */
-  
+  --accent-primary: 239 84% 67%;
+  /* Electric Indigo */
+  --accent-secondary: 191 91% 50%;
+  /* Cyber Cyan */
+  --accent-tertiary: 283 84% 67%;
+  /* Nebula Purple */
+
   /* Text Colors */
   --text-main: 210 40% 98%;
   --text-muted: 215 20% 65%;
-  
+
   /* Glassmorphism Defaults */
-  --glass-bg: rgba(255, 255, 255, 0.03);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-blur: 12px;
+  --glass-bg: rgba(15, 23, 42, 0.4);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-blur: 24px;
 }
 
 @tailwind base;
@@ -34,10 +37,11 @@
 
 @layer components {
   .premium-glass {
-    background: var(--glass-bg);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
     backdrop-filter: blur(var(--glass-blur));
     -webkit-backdrop-filter: blur(var(--glass-blur));
     border: 1px solid var(--glass-border);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
   }
 
   .premium-gradient-text {
@@ -45,7 +49,7 @@
   }
 
   .premium-card {
-    @apply premium-glass rounded-3xl transition-all duration-500 hover:border-white/20 hover:shadow-[0_20px_50px_rgba(0,0,0,0.3)];
+    @apply premium-glass rounded-3xl transition-all duration-500 hover:border-white/20 hover:shadow-[0_20px_50px_rgba(0, 0, 0, 0.3)];
   }
 
   .premium-button {
@@ -66,9 +70,19 @@
 
 /* Animations */
 @keyframes nebula-float {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(30px, -50px) scale(1.1); }
-  66% { transform: translate(-20px, 40px) scale(0.9); }
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+
+  66% {
+    transform: translate(-20px, 40px) scale(0.9);
+  }
 }
 
 .animate-nebula {

@@ -82,28 +82,28 @@ const App: React.FC = () => {
           </div>
         )}
 
-        <header className="h-24 border-b border-white/5 flex items-center justify-between px-12 bg-slate-950/40 backdrop-blur-3xl z-50">
-          <div className="flex items-center space-x-6">
-            <div className="flex items-baseline space-x-3">
-              <span className="premium-gradient-text text-sm tracking-[0.2em]">ODYSSEY_PLATFORM</span>
-              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest opacity-50">v2.4.0</span>
+        <header className="h-24 border-b border-white/5 flex items-center justify-between px-6 lg:px-12 bg-slate-950/40 backdrop-blur-3xl z-50">
+          <div className="flex items-center space-x-4 lg:space-x-6">
+            <div className="flex items-baseline space-x-2 lg:space-x-3">
+              <span className="premium-gradient-text text-[10px] lg:text-sm tracking-[0.2em]">ODYSSEY_PLATFORM</span>
+              <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest opacity-40">v2.4.0</span>
             </div>
-            <div className="w-px h-6 bg-white/10"></div>
-            <h4 className="text-white text-[10px] font-black uppercase tracking-[0.4em] opacity-80">{activeTab}</h4>
+            <div className="hidden sm:block w-px h-6 bg-white/10"></div>
+            <h4 className="hidden sm:block text-white text-[10px] font-black uppercase tracking-[0.4em] opacity-80">{activeTab}</h4>
           </div>
 
-          <div className="flex items-center space-x-12">
-            <div className="flex flex-col items-end">
+          <div className="flex items-center space-x-6 lg:space-x-12">
+            <div className="hidden md:flex flex-col items-end">
               <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest opacity-60">Global Ranking</span>
               <span className="text-sm font-black text-indigo-400 tracking-tighter">SCHOLAR TIER [IV]</span>
             </div>
-            <div className="px-6 py-3 premium-glass rounded-[28px] flex items-center space-x-6 shadow-2xl backdrop-blur-xl group cursor-pointer hover:border-white/20 transition-all duration-300">
+            <div className="px-4 lg:px-6 py-2.5 lg:py-3 premium-glass rounded-[24px] lg:rounded-[28px] flex items-center space-x-4 lg:space-x-6 shadow-2xl backdrop-blur-xl group cursor-pointer hover:border-white/20 transition-all duration-300">
               <div className="flex flex-col">
                 <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest leading-none mb-1">Total Progress</span>
-                <span className="text-xl font-black text-white tracking-tighter transition-transform group-hover:scale-105">{xp.toLocaleString()} <span className="text-xs text-indigo-400 ml-1">XP</span></span>
+                <span className="text-lg lg:text-xl font-black text-white tracking-tighter transition-transform group-hover:scale-105">{xp.toLocaleString()} <span className="text-[10px] lg:text-xs text-indigo-400 ml-1">XP</span></span>
               </div>
-              <div className="w-12 h-12 rounded-2xl bg-indigo-500 flex items-center justify-center text-white shadow-[0_0_20px_rgba(99,102,241,0.5)] group-hover:shadow-[0_0_30px_rgba(99,102,241,0.8)] transition-all">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+              <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-2xl bg-indigo-500 flex items-center justify-center text-white shadow-[0_0_20px_rgba(99,102,241,0.5)] group-hover:shadow-[0_0_30px_rgba(99,102,241,0.8)] transition-all">
+                <svg className="w-5 h-5 lg:w-6 lg:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
               </div>
             </div>
           </div>

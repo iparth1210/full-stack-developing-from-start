@@ -147,10 +147,10 @@ const Roadmap: React.FC<RoadmapProps> = ({ modules, onComplete }) => {
                   disabled={isLocked}
                   onClick={() => { setSelectedModuleId(mod.id); setSelectedDayNumber(1); }}
                   className={`w-full group p-5 rounded-3xl text-left border transition-all duration-500 relative overflow-hidden ${isSelected
-                      ? 'premium-glass border-indigo-500/40 shadow-[0_10px_30px_rgba(99,102,241,0.2)]'
-                      : isLocked
-                        ? 'border-transparent opacity-30 grayscale cursor-not-allowed'
-                        : 'border-transparent hover:bg-white/[0.03] hover:border-white/10'
+                    ? 'premium-glass border-indigo-500/40 shadow-[0_10px_30px_rgba(99,102,241,0.2)]'
+                    : isLocked
+                      ? 'border-transparent opacity-30 grayscale cursor-not-allowed'
+                      : 'border-transparent hover:bg-white/[0.03] hover:border-white/10'
                     }`}
                 >
                   <div className="flex items-center justify-between mb-2 relative z-10">
@@ -185,10 +185,10 @@ const Roadmap: React.FC<RoadmapProps> = ({ modules, onComplete }) => {
                   key={day.day}
                   onClick={() => { setSelectedDayNumber(day.day); setQuizAnswer(null); setShowExplanation(false); setActiveMode('theory'); }}
                   className={`relative aspect-square rounded-2xl flex items-center justify-center text-[11px] font-black transition-all duration-500 group ${isSelected
-                      ? 'bg-indigo-500 text-white shadow-[0_10px_25px_rgba(99,102,241,0.5)] scale-110 z-10'
-                      : isCompleted
-                        ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20'
-                        : 'bg-white/5 text-slate-500 border border-white/5 hover:border-white/20 hover:text-slate-300'
+                    ? 'bg-indigo-500 text-white shadow-[0_10px_25px_rgba(99,102,241,0.5)] scale-110 z-10'
+                    : isCompleted
+                      ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20'
+                      : 'bg-white/5 text-slate-500 border border-white/5 hover:border-white/20 hover:text-slate-300'
                     }`}
                 >
                   <span className="relative z-10">{day.day}</span>
@@ -212,9 +212,9 @@ const Roadmap: React.FC<RoadmapProps> = ({ modules, onComplete }) => {
             <div key={`${selectedModuleId}-${selectedDayNumber}`} className="max-w-5xl mx-auto space-y-24 animate-in fade-in slide-in-from-bottom-12 duration-1000 ease-out">
               <header className="space-y-10 relative">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4 premium-glass pl-3 pr-6 py-2 rounded-full border-white/10 shadow-xl">
-                    <div className="w-3 h-3 bg-indigo-500 rounded-full animate-pulse shadow-[0_0_15px_rgba(99,102,241,1)]"></div>
-                    <span className="text-[11px] font-black text-indigo-300 uppercase tracking-[0.3em]">Synapse Layer {activeModule.month}.{activeDay.day.toString().padStart(2, '0')}</span>
+                  <div className="flex items-center space-x-3 premium-glass pl-2 pr-4 py-1.5 rounded-full border-white/10 shadow-xl">
+                    <div className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(99,102,241,1)]"></div>
+                    <span className="text-[10px] font-black text-indigo-300 uppercase tracking-[0.2em]">Synapse Layer {activeModule.month}.{activeDay.day.toString().padStart(2, '0')}</span>
                   </div>
                   <button
                     onClick={handlePlayBriefing}
@@ -229,10 +229,10 @@ const Roadmap: React.FC<RoadmapProps> = ({ modules, onComplete }) => {
                     <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white">Audio Intelligence</span>
                   </button>
                 </div>
-                <h1 className="text-7xl lg:text-8xl font-black text-white leading-[0.95] tracking-tight antialiased">
+                <h1 className="text-[clamp(2.5rem,7vw,5rem)] font-black text-white leading-[1.1] tracking-tight antialiased">
                   {activeDay.title}
                 </h1>
-                <p className="text-slate-400 text-3xl font-medium leading-relaxed italic border-l-[6px] border-indigo-500/30 pl-12 max-w-4xl opacity-80 decoration-indigo-500/20 underline-offset-8 decoration-2">
+                <p className="text-xl lg:text-2xl text-slate-400 font-medium leading-relaxed italic border-l-[4px] border-indigo-500/30 pl-8 max-w-3xl opacity-80 decoration-indigo-500/20 underline-offset-8 decoration-2">
                   "{activeDay.objective}"
                 </p>
               </header>
@@ -243,8 +243,8 @@ const Roadmap: React.FC<RoadmapProps> = ({ modules, onComplete }) => {
                     key={mode}
                     onClick={() => setActiveMode(mode as any)}
                     className={`px-10 py-4.5 rounded-[32px] text-[10px] font-black uppercase tracking-[0.3em] transition-all duration-500 ${activeMode === mode
-                        ? 'premium-button text-white shadow-2xl -translate-y-1'
-                        : 'text-slate-500 hover:text-white hover:bg-white/[0.05]'
+                      ? 'premium-button text-white shadow-2xl -translate-y-1'
+                      : 'text-slate-500 hover:text-white hover:bg-white/[0.05]'
                       }`}
                   >
                     {mode}
@@ -259,8 +259,8 @@ const Roadmap: React.FC<RoadmapProps> = ({ modules, onComplete }) => {
                       <div className="absolute top-0 right-0 p-10 opacity-[0.03]">
                         <svg className="w-48 h-48" fill="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                       </div>
-                      <h4 className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.4em] mb-6">Strategic Context</h4>
-                      <p className="text-3xl lg:text-4xl font-black text-white leading-tight tracking-tight relative z-10">
+                      <h4 className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.4em] mb-4">Strategic Context</h4>
+                      <p className="text-xl lg:text-2xl font-black text-white leading-tight tracking-tight relative z-10">
                         {activeDay.conceptualWhy}
                       </p>
                     </div>
@@ -269,12 +269,12 @@ const Roadmap: React.FC<RoadmapProps> = ({ modules, onComplete }) => {
                       <h4 className="text-[11px] font-black text-slate-600 uppercase tracking-[0.4em] px-4">Deep Knowledge Layers</h4>
                       {activeDay.detailedTheory.map((point, i) => (
                         <div key={i} className="group grid grid-cols-1 lg:grid-cols-2 gap-12 items-center bg-white/[0.01] border border-white/5 p-10 rounded-[48px] hover:border-indigo-500/20 transition-all duration-500 shadow-xl">
-                          <div className="space-y-6">
-                            <div className="w-14 h-14 bg-indigo-500/10 rounded-2xl flex items-center justify-center text-indigo-400 border border-indigo-500/20 font-black text-xl">
+                          <div className="space-y-4">
+                            <div className="w-12 h-12 bg-indigo-500/10 rounded-xl flex items-center justify-center text-indigo-400 border border-indigo-500/20 font-black text-lg">
                               {(i + 1).toString().padStart(2, '0')}
                             </div>
-                            <h4 className="text-3xl font-black text-white tracking-tight">{point.title}</h4>
-                            <p className="text-lg text-slate-400 leading-relaxed font-medium">{point.description}</p>
+                            <h4 className="text-2xl font-black text-white tracking-tight">{point.title}</h4>
+                            <p className="text-base text-slate-400 leading-relaxed font-medium">{point.description}</p>
                           </div>
                           <div className="relative aspect-video lg:aspect-[4/3] rounded-[36px] overflow-hidden shadow-2xl border border-white/10 ring-1 ring-white/5">
                             <img src={point.imageUrl} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt={point.title} />
@@ -325,10 +325,10 @@ const Roadmap: React.FC<RoadmapProps> = ({ modules, onComplete }) => {
 
                       <div className="bg-slate-900/40 backdrop-blur-3xl border border-white/10 p-10 lg:p-14 rounded-[50px] shadow-4xl relative group/card overflow-hidden">
                         <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent"></div>
-                        <p className="text-3xl lg:text-4xl text-slate-100 leading-[1.3] font-black tracking-tight antialiased relative z-10">
-                          <span className="text-indigo-500 mr-2 text-5xl">"</span>
+                        <p className="text-xl lg:text-2xl text-slate-100 leading-[1.4] font-black tracking-tight antialiased relative z-10">
+                          <span className="text-indigo-500 mr-2 text-3xl">"</span>
                           {activeDay.funnyStory}
-                          <span className="text-indigo-500 ml-2 text-5xl">"</span>
+                          <span className="text-indigo-500 ml-2 text-3xl">"</span>
                         </p>
                         <div className="mt-8 flex items-center space-x-4 opacity-40">
                           <div className="h-px w-12 bg-white/20"></div>
@@ -389,10 +389,10 @@ const Roadmap: React.FC<RoadmapProps> = ({ modules, onComplete }) => {
                             onClick={() => handleQuizSubmit(i)}
                             disabled={showResult && quizAnswer === activeDay.quiz!.correctIndex}
                             className={`p-10 rounded-[48px] text-left text-2xl font-black transition-all duration-500 border relative group overflow-hidden ${showResult
-                                ? isCorrect
-                                  ? 'bg-emerald-500/10 border-emerald-500/60 text-emerald-400 shadow-xl'
-                                  : isSelected ? 'bg-rose-500/10 border-rose-500/60 text-rose-400 shadow-xl' : 'bg-white/[0.02] border-white/5 opacity-30 scale-95'
-                                : 'premium-glass border-white/10 hover:border-indigo-500/50 hover:bg-white/[0.05] hover:translate-x-4 shadow-lg active:scale-98'
+                              ? isCorrect
+                                ? 'bg-emerald-500/10 border-emerald-500/60 text-emerald-400 shadow-xl'
+                                : isSelected ? 'bg-rose-500/10 border-rose-500/60 text-rose-400 shadow-xl' : 'bg-white/[0.02] border-white/5 opacity-30 scale-95'
+                              : 'premium-glass border-white/10 hover:border-indigo-500/50 hover:bg-white/[0.05] hover:translate-x-4 shadow-lg active:scale-98'
                               }`}
                           >
                             <div className="flex items-center justify-between relative z-10">
@@ -440,7 +440,7 @@ const Roadmap: React.FC<RoadmapProps> = ({ modules, onComplete }) => {
         </div>
 
         {/* Intelligence Lab Sidebar */}
-        <div className="w-[520px] premium-glass border-l border-white/5 p-16 overflow-y-auto scrollbar-hide hidden xl:block shadow-[-40px_0_100px_rgba(0,0,0,0.8)] z-10 rounded-r-[40px]">
+        <div className="w-[380px] 2xl:w-[440px] premium-glass border-l border-white/5 p-8 lg:p-12 overflow-y-auto scrollbar-hide hidden xl:block shadow-[-20px_0_60px_rgba(0,0,0,0.5)] z-10 rounded-r-[40px]">
           <div className="space-y-16">
             <header className="flex items-center justify-between">
               <h4 className="text-[11px] font-black text-slate-500 uppercase tracking-[0.5em]">Strategic Assets</h4>
@@ -490,8 +490,8 @@ const Roadmap: React.FC<RoadmapProps> = ({ modules, onComplete }) => {
                     disabled={completedDays[selectedModuleId || '']?.has(selectedDayNumber)}
                     onClick={() => setActiveMode('quiz')}
                     className={`w-full py-6 rounded-[32px] text-[11px] font-black uppercase tracking-[0.4em] transition-all duration-700 shadow-2xl active:scale-95 ${completedDays[selectedModuleId || '']?.has(selectedDayNumber)
-                        ? 'bg-transparent border border-emerald-500/40 text-emerald-400 cursor-default opacity-100'
-                        : 'premium-button text-white'
+                      ? 'bg-transparent border border-emerald-500/40 text-emerald-400 cursor-default opacity-100'
+                      : 'premium-button text-white'
                       }`}
                   >
                     {completedDays[selectedModuleId || '']?.has(selectedDayNumber) ? 'STREAM SECURED' : 'INITIATE VALIDATION'}
