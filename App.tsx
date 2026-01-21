@@ -7,6 +7,7 @@ import MentorChat from './components/MentorChat';
 import Stats from './components/Stats';
 import AntigravityPortal from './components/AntigravityPortal';
 import CommandPalette from './components/CommandPalette';
+import HudCursor from './components/HudCursor';
 import { INITIAL_ROADMAP } from './constants';
 import { ProjectTask } from './types';
 
@@ -35,6 +36,7 @@ const App: React.FC = () => {
   const [neuralIntensity, setNeuralIntensity] = useState(() => Number(localStorage.getItem('odyssey_neural_intensity')) || 50);
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const [isSurge, setIsSurge] = useState(false);
+  const [parallax, setParallax] = useState({ x: 0, y: 0 });
 
   // Singularity Pass: Ambient Audio Ref
   const ambientRef = useRef<HTMLAudioElement | null>(null);
