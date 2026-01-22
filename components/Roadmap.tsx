@@ -156,7 +156,7 @@ const Roadmap: React.FC<RoadmapProps> = ({
               </button>
 
               {/* Module Dropdown */}
-              <div id="module-dropdown" className="hidden absolute top-full right-0 mt-2 w-64 premium-glass border border-white/10 rounded-2xl shadow-2xl z-50 p-2 max-h-80 overflow-y-auto scrollbar-hide animate-in fade-in slide-in-from-top-2 duration-200">
+              <div id="module-dropdown" className="hidden absolute top-full right-0 mt-2 w-80 premium-glass border border-white/10 rounded-2xl shadow-2xl z-50 p-2 max-h-96 overflow-y-auto scrollbar-hide animate-in fade-in slide-in-from-top-2 duration-200">
                 {modules.map(mod => {
                   const isSelected = selectedModuleId === mod.id;
                   const isLocked = mod.status === ModuleStatus.LOCKED;
@@ -169,16 +169,16 @@ const Roadmap: React.FC<RoadmapProps> = ({
                         setSelectedDayNumber(1);
                         document.getElementById('module-dropdown')?.classList.add('hidden');
                       }}
-                      className={`w-full p-3 rounded-xl text-left transition-all flex items-center gap-3 ${isSelected
+                      className={`w-full p-2.5 rounded-xl text-left transition-all flex items-center gap-2 ${isSelected
                         ? 'bg-indigo-500/20 text-white'
                         : isLocked
                           ? 'opacity-30 cursor-not-allowed text-slate-500'
                           : 'text-slate-400 hover:bg-white/5 hover:text-white'
                         }`}
                     >
-                      <span className="text-[9px] font-mono text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded">{mod.month.toString().padStart(2, '0')}</span>
-                      <span className="text-xs font-bold truncate flex-1">{mod.title}</span>
-                      {isSelected && <div className="w-2 h-2 bg-indigo-400 rounded-full"></div>}
+                      <span className="text-[8px] font-mono text-indigo-400 bg-indigo-500/10 px-1.5 py-0.5 rounded shrink-0">{mod.month.toString().padStart(2, '0')}</span>
+                      <span className="text-[10px] font-bold truncate flex-1">{mod.title}</span>
+                      {isSelected && <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full shrink-0"></div>}
                     </button>
                   );
                 })}
